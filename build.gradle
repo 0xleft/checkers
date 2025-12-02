@@ -5,6 +5,32 @@ plugins {
 group = 'uk.wwws'
 version = '1.0-SNAPSHOT'
 
+tasks.register('jarClient', Jar) {
+    archiveBaseName = 'client'
+    from sourceSets.main.output
+    manifest {
+        attributes 'Main-Class': 'uk.wwws.apps.Client'
+    }
+}
+
+tasks.register('jarServer', Jar) {
+    archiveBaseName = 'server'
+    from sourceSets.main.output
+    manifest {
+        attributes 'Main-Class': 'uk.wwws.apps.Server'
+    }
+}
+
+tasks.register('jarAI', Jar) {
+    archiveBaseName = 'ai'
+    from sourceSets.main.output
+    manifest {
+        attributes 'Main-Class': 'uk.wwws.apps.AI'
+    }
+}
+
+build.dependsOn jarClient, jarServer, jarAI
+
 repositories {
     mavenCentral()
 }

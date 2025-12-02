@@ -1,4 +1,4 @@
 package uk.wwws;
 
-public class App {
+abstract public class App {
 }
