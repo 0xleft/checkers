@@ -1,9 +1,6 @@
 package uk.wwws.net;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.net.exceptions.FailedToConnectException;
@@ -13,8 +10,8 @@ public class Connection {
     private Socket socket;
     private @NotNull String host;
     private int port;
-    private DataOutputStream out;
-    private DataInputStream in;
+    private PrintWriter out;
+    private BufferedReader in;
 
     // for client to connect to said socket
     public Connection(@NotNull Socket socket) throws FailedToCreateStreamsException {
@@ -46,16 +43,16 @@ public class Connection {
     }
 
     private void assignDataStreams() throws IOException {
-        out = new DataOutputStream(socket.getOutputStream());
-        in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public void write(@NotNull String data) throws IOException {
-        out.writeUTF(data);
+    public void write(@NotNull String data) {
+        out.write(data);
     }
 
     public @NotNull String read() throws IOException {
-        return in.readUTF();
+        return in.readLine();
     }
 
     public void disconnect() throws IOException {

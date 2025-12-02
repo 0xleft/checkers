@@ -63,6 +63,7 @@ public class ServerApp extends App
 
     @Override
     public void handleNewConnection(@NotNull Socket socket) {
+        System.out.println("New client connected");
         connections.add(
                 new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this));
     }
