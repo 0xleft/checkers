@@ -39,4 +39,15 @@ public class ServerConnectionThread extends Thread {
 
         handler.handleData(null, connection);
     }
+
+    @Override
+    public void interrupt() {
+        super.interrupt();
+
+        try {
+            connection.disconnect();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

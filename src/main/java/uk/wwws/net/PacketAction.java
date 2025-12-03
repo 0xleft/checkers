@@ -7,5 +7,5 @@ public enum PacketAction {
     MOVE,
     BYE,
     GAMESTART,
-    HI
+    ASSIGN_COLOR
 }

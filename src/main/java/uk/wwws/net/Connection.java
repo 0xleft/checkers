@@ -50,14 +50,24 @@ public class Connection {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public void write(@NotNull String data) {
-        System.out.println("Writting: " + data);
+    public @NotNull Connection write(@NotNull String data) {
         try {
-            out.write(data + "\n");
+            out.write(data);
             out.flush();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        return this;
+    }
+
+    public @NotNull Connection write(@NotNull PacketAction action) {
+        write(action.toString()).write("\n");
+        return this;
+    }
+
+    public @NotNull Connection write(@NotNull PacketAction action, @NotNull String data) {
+        write(action + " " + data + "\n");
+        return this;
     }
 
     public @NotNull String read() throws IOException {
@@ -68,10 +78,6 @@ public class Connection {
         socket.close();
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Connection c) {
@@ -79,5 +85,10 @@ public class Connection {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Connected to: " + host + ":" + port;
     }
 }

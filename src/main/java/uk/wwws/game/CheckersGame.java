@@ -3,6 +3,7 @@ package uk.wwws.game;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.game.exceptions.InvalidMoveException;
 
 public class CheckersGame implements Game {
     private Board board;
@@ -57,9 +58,9 @@ public class CheckersGame implements Game {
     }
 
     @Override
-    public void doMove(@NotNull Move move) {
+    public void doMove(@NotNull Move move) throws InvalidMoveException {
         if (!isValidMove(move)) {
-            return;
+            throw new InvalidMoveException("This is not a valid move");
         }
         if (move instanceof CheckersMove checkersMove) {
             if (isCapture(checkersMove)) {
@@ -72,6 +73,8 @@ public class CheckersGame implements Game {
                 resolvePromotion(checkersMove);
             }
         }
+
+        this.turn = turn.other();
     }
 
     private void resolveCapture(@NotNull CheckersMove move) {
@@ -103,5 +106,10 @@ public class CheckersGame implements Game {
 
     public void resetPlayers() {
         players.clear();
+    }
+
+    @Override
+    public String toString() {
+        return board.toString() + "\n" + players + "\n" + turn + "\n" + getValidMoves();
     }
 }

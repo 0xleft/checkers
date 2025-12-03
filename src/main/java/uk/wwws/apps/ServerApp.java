@@ -1,6 +1,8 @@
 package uk.wwws.apps;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.text.MessageFormat;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,10 +77,10 @@ public class ServerApp extends App
     @Override
     public void handleNewConnection(@NotNull Socket socket) {
         System.out.println("New client connected");
-        ConnectedClientThread client = new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this);
+        ConnectedClientThread client =
+                new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this);
         connections.add(client);
         client.start();
-        client.getPlayer().getConnection().write("HI");
     }
 
     private @Nullable ConnectedClientThread getConnectedPlayer(@NotNull Connection c) {
@@ -109,22 +111,21 @@ public class ServerApp extends App
         try {
             switch (PacketAction.valueOf(input.next().toUpperCase())) {
                 case QUEUE -> handleQueue(c);
-                case MOVE -> handleMove(data, c);
+                case MOVE -> handleMove(input, c);
                 case BYE, ERROR -> {
                     handleDisconnect(c);
                     return false;
                 }
                 default -> {
-                    c.write("ERROR");
+                    c.write(PacketAction.ERROR);
                     return false;
                 }
             }
-            return true;
         } catch (Exception e) {
-            c.write("ERROR");
+            c.write(PacketAction.ERROR);
         }
 
-        return false;
+        return true;
     }
 
     private void handleQueue(@NotNull Connection c) {
@@ -133,6 +134,11 @@ public class ServerApp extends App
         }
 
         ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
+        if (queue.contains(player)) {
+            player.getConnection().write(PacketAction.ERROR);
+            return;
+        }
+
         queue.add(player);
         checkQueue();
     }
@@ -140,7 +146,7 @@ public class ServerApp extends App
     private void handleGameEnd(@NotNull Player player) {
         if (player instanceof ConnectedPlayer cp) {
             cp.setGame(null);
-            cp.getConnection().write("GAMEOVER");
+            cp.getConnection().write(PacketAction.GAMEOVER);
         }
     }
 
@@ -159,14 +165,14 @@ public class ServerApp extends App
         }
 
         clientThread.interrupt();
+        c.write(PacketAction.BYE);
         connections.remove(clientThread);
         queue.remove(player);
         System.out.println("Client disconnected");
     }
 
-    private void handleMove(@NotNull String data, @NotNull Connection c) {
-        System.out.println("Recieved move data: " + data);
-        Scanner input = new Scanner(data);
+    private void handleMove(@NotNull Scanner input, @NotNull Connection c) {
+        System.out.println("Handling player move:" + input.tokens());
 
         int fromIndex;
         int toIndex;
@@ -175,24 +181,29 @@ public class ServerApp extends App
             fromIndex = input.nextInt();
             toIndex = input.nextInt();
         } catch (NoSuchElementException | IllegalStateException e) {
-            System.out.println("Invalid move packet: " + data);
-            c.write("ERROR");
+            System.out.println("Invalid move packet: " + input.tokens());
+            c.write(PacketAction.ERROR);
             return;
         }
 
         ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
         if (player.getGame() == null) {
-            c.write("ERROR");
+            c.write(PacketAction.ERROR);
             System.out.println("Player of no game tried to make a move");
             return;
         }
 
         if (game.getTurn() != player) {
-            c.write("ERROR");
+            c.write(PacketAction.ERROR);
             System.out.println("Player tried to move when its not its turn");
+            return;
         }
 
         player.getGame().doMove(new CheckersMove(fromIndex, toIndex));
+        for (Player otherPlayer : game.getPlayers()) {
+            ((ConnectedPlayer) otherPlayer).getConnection()
+                    .write(PacketAction.MOVE, MessageFormat.format("{0} {1}", fromIndex, toIndex));
+        }
 
         if (game.isGameOver()) {
             for (Player otherPlayer : game.getPlayers()) {
@@ -204,10 +215,17 @@ public class ServerApp extends App
     private void checkQueue() {
         if (queue.size() > 1) {
             CheckersGame game = new CheckersGame();
-            Player player1 = queue.poll();
-            Player player2 = queue.poll();
+            ConnectedPlayer player1 = queue.poll();
+            ConnectedPlayer player2 = queue.poll();
             game.addPlayer(player1, Checker.WHITE);
             game.addPlayer(player2, Checker.BLACK);
+            player1.setGame(game);
+            player2.setGame(game);
+
+            player1.getConnection().write(PacketAction.ASSIGN_COLOR, Checker.WHITE.name())
+                    .write(PacketAction.GAMESTART);
+            player2.getConnection().write(PacketAction.ASSIGN_COLOR, Checker.BLACK.name())
+                    .write(PacketAction.GAMESTART);
 
             checkQueue();
         }
@@ -220,8 +238,18 @@ public class ServerApp extends App
         }
 
         serverThread.interrupt();
-        serverThread = null;
+        reset();
 
         System.out.println("Stopped server");
+    }
+
+    private void reset() {
+        this.serverThread = null;
+        this.queue = new LinkedList<>();
+        connections.forEach(c -> {
+            c.getPlayer().getConnection().write(PacketAction.BYE);
+            c.interrupt();
+        });
+        this.connections = new HashSet<>();
     }
 }
