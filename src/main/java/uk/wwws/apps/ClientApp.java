@@ -3,6 +3,7 @@ package uk.wwws.apps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.App;
+import uk.wwws.game.CheckersGame;
 import uk.wwws.game.players.HumanPlayer;
 import uk.wwws.net.Connection;
 import uk.wwws.net.ConnectionSender;
@@ -16,6 +17,7 @@ public class ClientApp extends App implements ConnectionSender, ConnectionDataHa
     private HumanPlayer player;
     private ServerConnectionThread connectionThread;
     private Connection connection;
+    private CheckersGame game;
 
     private static ClientApp instance;
 
@@ -29,6 +31,7 @@ public class ClientApp extends App implements ConnectionSender, ConnectionDataHa
 
     public ClientApp() {
         player = new HumanPlayer();
+        game = new CheckersGame();
     }
 
     static void main() {
@@ -39,9 +42,16 @@ public class ClientApp extends App implements ConnectionSender, ConnectionDataHa
     protected void handleAction(@Nullable CommandAction action) {
         switch (action) {
             case CONNECT -> handleConnect();
+            case MOVE -> handleMove();
             case null, default -> System.out.println(
                     "Invalid command or wrong argument usage. Type help to get command list");
         }
+    }
+
+    private void handleMove() {
+        String test = getNextStringArg();
+        System.out.println(test);
+        connection.write(getNextStringArg());
     }
 
     private void handleConnect() {
@@ -67,6 +77,7 @@ public class ClientApp extends App implements ConnectionSender, ConnectionDataHa
 
     @Override
     public boolean handleData(@NotNull String data, @NotNull Connection c) {
-        return false;
+        System.out.println(data);
+        return true;
     }
 }

@@ -5,5 +5,6 @@ public enum PacketAction {
     QUEUE,
     ERROR,
     MOVE,
-
+    BYE,
+    GAMESTART
 }

@@ -32,8 +32,11 @@ public class ConnectedClientThread extends Thread {
         }
     }
 
-    @Override
     public void run() {
+        System.out.println("test");
+
+        super.run();
+
         String inputLine;
 
         while (true) {
@@ -45,5 +48,7 @@ public class ConnectedClientThread extends Thread {
 
             if (!handler.handleData(inputLine, this.player.getConnection())) break;
         }
+
+        System.out.println("test");
     }
 }

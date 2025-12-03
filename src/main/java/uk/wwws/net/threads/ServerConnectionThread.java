@@ -16,7 +16,6 @@ public class ServerConnectionThread extends Thread {
         this.handler = handler;
     }
 
-    @Override
     public void run() {
         super.run();
 

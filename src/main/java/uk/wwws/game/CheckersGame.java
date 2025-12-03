@@ -1,8 +1,6 @@
 package uk.wwws.game;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +21,7 @@ public class CheckersGame implements Game {
     }
 
     @Override
-    public @NotNull Player getTurn() {
-        assert turn != Checker.EMPTY;
+    public @Nullable Player getTurn() {
         return players.get(turn);
     }
 
@@ -55,13 +52,17 @@ public class CheckersGame implements Game {
         return false;
     }
 
+    private boolean isCapture(CheckersMove move) {
+        return Math.abs(board.getRow(move.startIndex()) - board.getRow(move.startIndex())) == 2;
+    }
+
     @Override
     public void doMove(@NotNull Move move) {
         if (!isValidMove(move)) {
             return;
         }
         if (move instanceof CheckersMove checkersMove) {
-            if (checkersMove.isCapture()) {
+            if (isCapture(checkersMove)) {
                 resolveCapture(checkersMove);
             } else {
                 resolveMove(checkersMove);
@@ -87,5 +88,20 @@ public class CheckersGame implements Game {
 
     private void resolvePromotion(@NotNull CheckersMove move) {
         board.setField(move.endIndex(), board.getField(move.endIndex()).queen());
+    }
+
+    public Collection<Player> getPlayers() {
+        return players.values();
+    }
+
+    public void addPlayer(@NotNull Player player, @NotNull Checker c) {
+        if (players.get(c) != null) {
+            return;
+        }
+        players.put(c, player);
+    }
+
+    public void resetPlayers() {
+        players.clear();
     }
 }

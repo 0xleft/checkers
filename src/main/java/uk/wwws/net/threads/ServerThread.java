@@ -18,8 +18,9 @@ public class ServerThread extends Thread {
         this.handler = handler;
     }
 
-    @Override
     public void run() {
+        super.run();
+
         try {
             socket = new ServerSocket(port);
         } catch (IOException e) {

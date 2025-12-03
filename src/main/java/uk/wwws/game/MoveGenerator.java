@@ -44,12 +44,12 @@ public class MoveGenerator {
 
         if (board.isEmptyField(board.getRow(index) - 2, board.getCol(index) + 2) && board.getField(board.getRow(index) - 1, board.getCol(index) + 1) == piece.other()) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 2,
-                                                               board.getCol(index) + 2), true));
+                                                               board.getCol(index) + 2)));
         }
 
         if (board.isEmptyField(board.getRow(index) - 2, board.getCol(index) - 2) && board.getField(board.getRow(index) - 1, board.getCol(index) - 1) == piece.other()) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 2,
-                                                               board.getCol(index) - 2), true));
+                                                               board.getCol(index) - 2)));
         }
     }
 
@@ -63,12 +63,12 @@ public class MoveGenerator {
 
         if (board.isEmptyField(board.getRow(index) - 1, board.getCol(index) + 1)) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 1,
-                                                               board.getCol(index) + 1), false));
+                                                               board.getCol(index) + 1)));
         }
 
         if (board.isEmptyField(board.getRow(index) - 1, board.getCol(index) - 1)) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 1,
-                                                               board.getCol(index) - 1), false));
+                                                               board.getCol(index) - 1)));
         }
     }
 
@@ -82,12 +82,12 @@ public class MoveGenerator {
 
         if (board.isEmptyField(board.getRow(index) + 2, board.getCol(index) + 2) && board.getField(board.getRow(index) + 1, board.getCol(index) + 1) == piece.other()) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 2,
-                                                               board.getCol(index) + 2), true));
+                                                               board.getCol(index) + 2)));
         }
 
         if (board.isEmptyField(board.getRow(index) + 2, board.getCol(index) - 2) && board.getField(board.getRow(index) + 1, board.getCol(index) - 1) == piece.other()) {
             legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 2,
-                                                               board.getCol(index) - 2), true));
+                                                               board.getCol(index) - 2)));
         }
     }
 
@@ -102,14 +102,14 @@ public class MoveGenerator {
         if (board.getCol(index) < 7) {
             if (board.isEmptyField(board.getRow(index) + 1, board.getCol(index) + 1)) {
                 legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 1,
-                                                                   board.getCol(index) + 1), false));
+                                                                   board.getCol(index) + 1)));
             }
         }
 
         if (board.getCol(index) > 0) {
             if (board.isEmptyField(board.getRow(index) + 1, board.getCol(index) - 1)) {
                 legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 1,
-                                                                   board.getCol(index) - 1), false));
+                                                                   board.getCol(index) - 1)));
             }
         }
     }
