@@ -90,6 +90,7 @@ public class ClientApp extends App implements ConnectionSender, ConnectionDataHa
 
         if (game.getTurn() != this.player) {
             System.out.println("It's not your turn to move");
+            // return;
         }
 
         Integer from = getNextIntArg();

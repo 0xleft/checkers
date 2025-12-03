@@ -172,8 +172,6 @@ public class ServerApp extends App
     }
 
     private void handleMove(@NotNull Scanner input, @NotNull Connection c) {
-        System.out.println("Handling player move:" + input.tokens());
-
         int fromIndex;
         int toIndex;
 
@@ -181,17 +179,19 @@ public class ServerApp extends App
             fromIndex = input.nextInt();
             toIndex = input.nextInt();
         } catch (NoSuchElementException | IllegalStateException e) {
-            System.out.println("Invalid move packet: " + input.tokens());
+            System.out.println("Invalid move packet: " + Arrays.toString(input.tokens().toArray()));
             c.write(PacketAction.ERROR);
             return;
         }
 
         ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
-        if (player.getGame() == null) {
+        CheckersGame game = player.getGame();
+        if (game == null) {
             c.write(PacketAction.ERROR);
             System.out.println("Player of no game tried to make a move");
             return;
         }
+
 
         if (game.getTurn() != player) {
             c.write(PacketAction.ERROR);

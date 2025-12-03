@@ -54,7 +54,7 @@ public class CheckersGame implements Game {
     }
 
     private boolean isCapture(CheckersMove move) {
-        return Math.abs(board.getRow(move.startIndex()) - board.getRow(move.startIndex())) == 2;
+        return Math.abs(board.getRow(move.endIndex()) - board.getRow(move.startIndex())) == 2;
     }
 
     @Override
@@ -64,10 +64,10 @@ public class CheckersGame implements Game {
         }
         if (move instanceof CheckersMove checkersMove) {
             if (isCapture(checkersMove)) {
+                System.out.println("It was a capture");
                 resolveCapture(checkersMove);
-            } else {
-                resolveMove(checkersMove);
             }
+            resolveMove(checkersMove);
 
             if (board.shouldPromote(checkersMove.endIndex())) {
                 resolvePromotion(checkersMove);
@@ -78,10 +78,9 @@ public class CheckersGame implements Game {
     }
 
     private void resolveCapture(@NotNull CheckersMove move) {
-        board.setField(board.getRow(move.startIndex()) + board.getRow(move.endIndex()) / 2,
-                       board.getCol(move.startIndex()) + board.getCol(move.endIndex()) / 2,
+        board.setField(board.getRow(move.startIndex()) + ( board.getRow(move.endIndex()) - board.getRow(move.startIndex())) / 2,
+                       board.getCol(move.startIndex()) + (board.getCol(move.endIndex()) - board.getCol(move.startIndex())) / 2,
                        Checker.EMPTY);
-        resolveMove(move);
     }
 
     private void resolveMove(@NotNull CheckersMove move) {

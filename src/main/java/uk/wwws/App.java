@@ -6,12 +6,6 @@ import uk.wwws.tui.CommandAction;
 import uk.wwws.tui.TUI;
 
 abstract public class App extends TUI {
-    protected CheckersGame game;
-
-    public App() {
-        game = new CheckersGame();
-    }
-
     protected final void run() {
         boolean stop = false;
         while (!stop) {
