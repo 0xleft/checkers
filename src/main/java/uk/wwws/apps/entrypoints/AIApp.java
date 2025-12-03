@@ -3,6 +3,7 @@ package uk.wwws.apps.entrypoints;
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.ErrorType;
 import uk.wwws.ai.DummyAIPlayer;
 import uk.wwws.apps.ClientLikeApp;
 import uk.wwws.game.CheckersMove;

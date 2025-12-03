@@ -5,7 +5,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.apps.entrypoints.ErrorType;
+import uk.wwws.ErrorType;
 import uk.wwws.game.Checker;
 import uk.wwws.game.CheckersGame;
 import uk.wwws.game.CheckersMove;

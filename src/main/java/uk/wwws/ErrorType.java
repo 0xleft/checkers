@@ -1,4 +1,4 @@
-package uk.wwws.apps.entrypoints;
+package uk.wwws;
 
 public enum ErrorType {
     NONE,

@@ -2,7 +2,7 @@ package uk.wwws.net.threads;
 
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
-import uk.wwws.apps.entrypoints.ErrorType;
+import uk.wwws.ErrorType;
 import uk.wwws.net.Connection;
 
 /**

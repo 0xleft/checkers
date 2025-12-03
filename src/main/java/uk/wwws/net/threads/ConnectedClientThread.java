@@ -2,9 +2,7 @@ package uk.wwws.net.threads;
 
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import uk.wwws.apps.entrypoints.ErrorType;
-import uk.wwws.game.CheckersGame;
+import uk.wwws.ErrorType;
 import uk.wwws.game.players.ConnectedPlayer;
 
 /**

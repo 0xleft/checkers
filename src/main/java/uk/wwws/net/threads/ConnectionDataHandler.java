@@ -2,7 +2,7 @@ package uk.wwws.net.threads;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.apps.entrypoints.ErrorType;
+import uk.wwws.ErrorType;
 import uk.wwws.net.Connection;
 
 public interface ConnectionDataHandler {

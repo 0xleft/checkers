@@ -9,7 +9,7 @@ tasks.register('jarClient', Jar) {
     archiveBaseName = 'client'
     from sourceSets.main.output
     manifest {
-        attributes 'Main-Class': 'uk.wwws.apps.ClientApp'
+        attributes 'Main-Class': 'uk.wwws.apps.entrypoints.ClientApp'
     }
 }
 
@@ -17,7 +17,7 @@ tasks.register('jarServer', Jar) {
     archiveBaseName = 'server'
     from sourceSets.main.output
     manifest {
-        attributes 'Main-Class': 'uk.wwws.apps.ServerApp'
+        attributes 'Main-Class': 'uk.wwws.apps.entrypoints.ServerApp'
     }
 }
 
@@ -25,7 +25,7 @@ tasks.register('jarAI', Jar) {
     archiveBaseName = 'ai'
     from sourceSets.main.output
     manifest {
-        attributes 'Main-Class': 'uk.wwws.apps.AIApp'
+        attributes 'Main-Class': 'uk.wwws.apps.entrypoints.AIApp'
     }
 }
 

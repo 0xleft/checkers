@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.apps.entrypoints.ErrorType;
+import uk.wwws.ErrorType;
 import uk.wwws.apps.exceptions.ServerErrorException;
 import uk.wwws.game.*;
 import uk.wwws.net.Connection;
