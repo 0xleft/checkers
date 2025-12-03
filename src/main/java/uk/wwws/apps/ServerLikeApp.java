@@ -1,12 +1,11 @@
 package uk.wwws.apps;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.App;
+import uk.wwws.apps.entrypoints.ErrorType;
 import uk.wwws.game.Checker;
 import uk.wwws.game.CheckersGame;
 import uk.wwws.game.CheckersMove;
@@ -15,29 +14,18 @@ import uk.wwws.game.players.ConnectedPlayer;
 import uk.wwws.net.Connection;
 import uk.wwws.net.ConnectionReceiver;
 import uk.wwws.net.PacketAction;
-import uk.wwws.net.threads.*;
+import uk.wwws.net.threads.ConnectedClientThread;
+import uk.wwws.net.threads.ConnectionDataHandler;
+import uk.wwws.net.threads.NewConnectionHandler;
+import uk.wwws.net.threads.ServerThread;
 import uk.wwws.tui.CommandAction;
 
-public class ServerApp extends App
-        implements ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
+public abstract class ServerLikeApp extends App implements ConnectionReceiver,
+        ConnectionDataHandler, NewConnectionHandler {
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
 
     private @Nullable ServerThread serverThread;
-
-    private static ServerApp instance;
-
-    public static ServerApp getInstance() {
-        if (instance == null) {
-            instance = new ServerApp();
-        }
-
-        return instance;
-    }
-
-    static void main() {
-        ServerApp.getInstance().run();
-    }
 
     @Override
     protected void handleAction(@Nullable CommandAction action) {
@@ -98,10 +86,10 @@ public class ServerApp extends App
     }
 
     @Override
-    public boolean handleData(@Nullable String data, @NotNull Connection c) {
+    public ErrorType handleData(@Nullable String data, @NotNull Connection c) {
         if (data == null) {
             handleDisconnect(c);
-            return false;
+            return ErrorType.FATAL;
         }
 
         Scanner input = new Scanner(data);
@@ -114,18 +102,19 @@ public class ServerApp extends App
                 case MOVE -> handleMove(input, c);
                 case BYE, ERROR -> {
                     handleDisconnect(c);
-                    return false;
+                    return ErrorType.FATAL;
                 }
                 default -> {
                     c.write(PacketAction.ERROR);
-                    return false;
+                    return ErrorType.FATAL;
                 }
             }
         } catch (Exception e) {
             c.write(PacketAction.ERROR);
+            return ErrorType.ERROR;
         }
 
-        return true;
+        return ErrorType.NONE;
     }
 
     private void handleQueue(@NotNull Connection c) {

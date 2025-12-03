@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Board {
     public static final int DIM = 8;
-    private Checker[] fields = new Checker[DIM*DIM];
+    private Checker[] fields = new Checker[DIM * DIM];
 
     public Board() {
         defaultBoard();
@@ -56,6 +56,10 @@ public class Board {
 
     //@ pure
     public Checker getField(int i) {
+        if (i >= DIM * DIM) {
+            return Checker.EMPTY;
+        }
+
         return this.fields[i];
     }
 
@@ -71,7 +75,9 @@ public class Board {
 
     //@ pure
     public boolean isEmptyField(int row, int col) {
-        if (row < 0 || col > 7) return false;
+        if (row < 0 || col > 7) {
+            return false;
+        }
 
         return isEmptyField(index(row, col));
     }

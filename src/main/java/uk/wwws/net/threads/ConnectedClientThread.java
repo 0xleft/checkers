@@ -3,6 +3,7 @@ package uk.wwws.net.threads;
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.apps.entrypoints.ErrorType;
 import uk.wwws.game.CheckersGame;
 import uk.wwws.game.players.ConnectedPlayer;
 
@@ -46,9 +47,7 @@ public class ConnectedClientThread extends Thread {
                 break;
             }
 
-            if (!handler.handleData(inputLine, this.player.getConnection())) {
-                break;
-            }
+            if (handler.handleData(inputLine, this.player.getConnection()) == ErrorType.FATAL) break;
         }
 
         handler.handleData(null, this.player.getConnection());

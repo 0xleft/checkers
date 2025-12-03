@@ -2,6 +2,7 @@ package uk.wwws.net.threads;
 
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.apps.entrypoints.ErrorType;
 import uk.wwws.net.Connection;
 
 /**
@@ -34,7 +35,7 @@ public class ServerConnectionThread extends Thread {
                 break;
             }
 
-            if (!handler.handleData(inputLine, connection)) break;
+            if (handler.handleData(inputLine, connection) == ErrorType.FATAL) break;
         }
 
         handler.handleData(null, connection);

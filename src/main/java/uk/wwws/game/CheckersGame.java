@@ -64,7 +64,6 @@ public class CheckersGame implements Game {
         }
         if (move instanceof CheckersMove checkersMove) {
             if (isCapture(checkersMove)) {
-                System.out.println("It was a capture");
                 resolveCapture(checkersMove);
             }
             resolveMove(checkersMove);

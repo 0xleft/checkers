@@ -1,11 +1,12 @@
-package uk.wwws;
+package uk.wwws.apps;
 
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.game.CheckersGame;
+import uk.wwws.ai.DummyAIPlayer;
 import uk.wwws.tui.CommandAction;
 import uk.wwws.tui.TUI;
 
 abstract public class App extends TUI {
+
     protected final void run() {
         boolean stop = false;
         while (!stop) {
