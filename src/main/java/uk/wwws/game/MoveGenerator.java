@@ -2,6 +2,7 @@ package uk.wwws.game;
 
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.game.bitboards.Bitboard;
 
 /*
 I am aware that bitboards are way more effective but this is a quick and dirty prototype implemetation.
@@ -23,7 +24,7 @@ public class MoveGenerator {
                                               @NotNull HashSet<CheckersMove> legalMoves) {
         Checker piece = board.getField(index);
 
-
+        Bitboard allPieces = new Bitboard(board.getCheckers(), null, Board.DIM);
         if (!piece.isQueen()) {
             return;
         }

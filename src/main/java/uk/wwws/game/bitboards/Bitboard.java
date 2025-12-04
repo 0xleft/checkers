@@ -1,21 +1,30 @@
-package uk.wwws.game;
+package uk.wwws.game.bitboards;
 
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.game.Board;
+import uk.wwws.game.Checker;
 
 public class Bitboard extends BitSet {
-    public Bitboard() {
-        super(Board.DIM * Board.DIM);
+    protected final int boardDim;
+
+    public Bitboard(int boardDim) {
+        super(boardDim * boardDim);
+        this.boardDim = boardDim;
+    }
+
+    public int getBoardDim() {
+        return boardDim;
     }
 
     /*@
         ensures this.cardinality() == \old(this.cardinality());
     */
-    public Bitboard(BitSet bitSet) {
-        this();
+    public Bitboard(BitSet bitSet, int boardDim) {
+        this(boardDim);
         for (int i = 0; i < bitSet.size(); i++) {
             if (bitSet.get(i)) {
                 set(i);
@@ -23,8 +32,8 @@ public class Bitboard extends BitSet {
         }
     }
 
-    public Bitboard(@NotNull Checker[] checkers, @Nullable Checker mask) {
-        this();
+    public Bitboard(@NotNull Checker[] checkers, @Nullable Checker mask, int boardDim) {
+        this(boardDim);
 
         for (int i = 0; i < checkers.length; i++) {
             if (checkers[i] == mask || (mask == null && Checker.EMPTY != checkers[i])) {
@@ -67,7 +76,7 @@ public class Bitboard extends BitSet {
     }
 
     private @NotNull Bitboard shiftR() {
-        Bitboard bitboard = new Bitboard();
+        Bitboard bitboard = new Bitboard(boardDim);
 
         for (int i = 1; i < size() - 1; i++) {
             if (get(i - 1)) {
@@ -93,7 +102,7 @@ public class Bitboard extends BitSet {
     }
 
     private @NotNull Bitboard shiftV(int n) {
-        Bitboard bitboard = new Bitboard(this);
+        Bitboard bitboard = new Bitboard(this, boardDim);
 
         for (int i = 0; i < Math.abs(n); i++) {
             if (n > 0) {
@@ -107,7 +116,7 @@ public class Bitboard extends BitSet {
     }
 
     static void main() {
-        Bitboard bitboard = new Bitboard();
+        Bitboard bitboard = new Bitboard(8);
         bitboard.set(0);
 
         System.out.println(bitboard.shiftV(4).shiftV(-4));

@@ -10,6 +10,10 @@ public class Board {
         defaultBoard();
     }
 
+    public Checker[] getCheckers() {
+        return fields;
+    }
+
     private void defaultBoard() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
