@@ -13,7 +13,7 @@ import uk.wwws.net.PacketAction;
 import uk.wwws.net.exceptions.FailedToConnectException;
 import uk.wwws.net.threads.ConnectionDataHandler;
 import uk.wwws.net.threads.ServerConnectionThread;
-import uk.wwws.tui.CommandAction;
+import uk.wwws.ui.CommandAction;
 
 public abstract class ClientLikeApp extends App implements ConnectionSender, ConnectionDataHandler {
     protected ServerConnectionThread connectionThread;

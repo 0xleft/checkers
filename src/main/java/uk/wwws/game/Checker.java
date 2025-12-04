@@ -40,7 +40,6 @@ public enum Checker {
         return this == BLACK_QUEEN || this == WHITE_QUEEN;
     }
 
-
     @Override
     public @NotNull String toString() {
         switch (this) {

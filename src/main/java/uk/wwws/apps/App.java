@@ -1,9 +1,8 @@
 package uk.wwws.apps;
 
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.ai.DummyAIPlayer;
-import uk.wwws.tui.CommandAction;
-import uk.wwws.tui.TUI;
+import uk.wwws.ui.CommandAction;
+import uk.wwws.ui.TUI;
 
 abstract public class App extends TUI {
 

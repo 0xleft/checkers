@@ -1,4 +1,4 @@
-package uk.wwws.tui;
+package uk.wwws.ui;
 
 public enum CommandAction {
     CONNECT,

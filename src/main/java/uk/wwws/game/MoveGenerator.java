@@ -1,6 +1,5 @@
 package uk.wwws.game;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,94 +22,10 @@ public class MoveGenerator {
     private static void generateMovesForPiece(@NotNull Board board, int index,
                                               @NotNull HashSet<CheckersMove> legalMoves) {
         Checker piece = board.getField(index);
-        generateForwardCaptures(board, index, legalMoves);
-        generateForward(board, index, legalMoves);
+
 
         if (!piece.isQueen()) {
             return;
-        }
-
-        generateBackwardCaptures(board, index, legalMoves);
-        generateBackward(board, index, legalMoves);
-    }
-
-    private static void generateForwardCaptures(@NotNull Board board, int index,
-                                                @NotNull HashSet<CheckersMove> legalMoves) {
-        Checker piece = board.getField(index);
-        if (piece == Checker.BLACK) {
-            generateBackwardCaptures(board, index, legalMoves);
-            return;
-        }
-
-        if (board.isEmptyField(board.getRow(index) - 2, board.getCol(index) + 2) && board.getField(board.getRow(index) - 1, board.getCol(index) + 1) == piece.other()) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 2,
-                                                               board.getCol(index) + 2)));
-        }
-
-        if (board.isEmptyField(board.getRow(index) - 2, board.getCol(index) - 2) && board.getField(board.getRow(index) - 1, board.getCol(index) - 1) == piece.other()) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 2,
-                                                               board.getCol(index) - 2)));
-        }
-    }
-
-    private static void generateForward(@NotNull Board board, int index,
-                                        @NotNull HashSet<CheckersMove> legalMoves) {
-        Checker piece = board.getField(index);
-        if (piece == Checker.BLACK) {
-            generateBackward(board, index, legalMoves);
-            return;
-        }
-
-        if (board.isEmptyField(board.getRow(index) - 1, board.getCol(index) + 1)) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 1,
-                                                               board.getCol(index) + 1)));
-        }
-
-        if (board.isEmptyField(board.getRow(index) - 1, board.getCol(index) - 1)) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) - 1,
-                                                               board.getCol(index) - 1)));
-        }
-    }
-
-    private static void generateBackwardCaptures(@NotNull Board board, int index,
-                                                 @NotNull HashSet<CheckersMove> legalMoves) {
-        Checker piece = board.getField(index);
-        if (piece == Checker.BLACK_QUEEN) {
-            generateForwardCaptures(board, index, legalMoves);
-            return;
-        }
-
-        if (board.isEmptyField(board.getRow(index) + 2, board.getCol(index) + 2) && board.getField(board.getRow(index) + 1, board.getCol(index) + 1) == piece.other()) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 2,
-                                                               board.getCol(index) + 2)));
-        }
-
-        if (board.isEmptyField(board.getRow(index) + 2, board.getCol(index) - 2) && board.getField(board.getRow(index) + 1, board.getCol(index) - 1) == piece.other()) {
-            legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 2,
-                                                               board.getCol(index) - 2)));
-        }
-    }
-
-    private static void generateBackward(@NotNull Board board, int index,
-                                         @NotNull HashSet<CheckersMove> legalMoves) {
-        Checker piece = board.getField(index);
-        if (piece == Checker.BLACK_QUEEN) {
-            generateForward(board, index, legalMoves);
-            return;
-        }
-
-        if (board.getCol(index) < 7) {
-            if (board.isEmptyField(board.getRow(index) + 1, board.getCol(index) + 1)) {
-                legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 1,
-                                                                   board.getCol(index) + 1)));
-            }
-        }
-
-        if (board.getCol(index) > 0) {
-            if (board.isEmptyField(board.getRow(index) + 1, board.getCol(index) - 1)) {
-                legalMoves.add(new CheckersMove(index, board.index(board.getRow(index) + 1,
-                                                                   board.getCol(index) - 1)));
-            }
         }
     }
 

@@ -1,12 +1,10 @@
-package uk.wwws.tui;
+package uk.wwws.ui;
 
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TUI {
+public class TUI extends UI {
     Scanner scanner;
 
     protected TUI() {

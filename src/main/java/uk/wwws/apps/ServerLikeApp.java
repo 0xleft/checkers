@@ -18,7 +18,7 @@ import uk.wwws.net.threads.ConnectedClientThread;
 import uk.wwws.net.threads.ConnectionDataHandler;
 import uk.wwws.net.threads.NewConnectionHandler;
 import uk.wwws.net.threads.ServerThread;
-import uk.wwws.tui.CommandAction;
+import uk.wwws.ui.CommandAction;
 
 public abstract class ServerLikeApp extends App implements ConnectionReceiver,
         ConnectionDataHandler, NewConnectionHandler {
