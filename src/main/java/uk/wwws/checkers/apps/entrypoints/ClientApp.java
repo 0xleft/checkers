@@ -18,7 +18,7 @@ public class ClientApp extends ClientLikeApp {
         super(new HumanPlayer());
     }
 
-    static void main() {
+    public static void main(String[] args) {
         ClientApp.getInstance().run();
     }
 }

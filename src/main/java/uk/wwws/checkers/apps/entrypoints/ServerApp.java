@@ -14,7 +14,7 @@ public class ServerApp extends ServerLikeApp {
         return instance;
     }
 
-    static void main() {
+    public static void main(String[] args) {
         ServerApp.getInstance().run();
     }
 }
