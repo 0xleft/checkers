@@ -1,17 +1,14 @@
 package uk.wwws.ui;
 
-import java.util.Scanner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.io.File;
+import java.net.MalformedURLException;
 
-public class GUI implements UI {
-    @Override
-    public void run() {
-
+abstract public class GUI implements UI {
+    protected GUI() {
     }
 
     @Override
-    public void handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
+    public void run() {
 
     }
 }

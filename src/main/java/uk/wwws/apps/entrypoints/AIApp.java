@@ -14,7 +14,7 @@ import uk.wwws.net.ConnectionSender;
 import uk.wwws.net.threads.ConnectionDataHandler;
 
 public class AIApp extends ClientLikeApp implements ConnectionSender, ConnectionDataHandler {
-    private static final Logger logger = LogManager.getLogger(AIApp.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     private static AIApp instance;
 

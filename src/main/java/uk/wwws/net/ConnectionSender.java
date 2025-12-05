@@ -11,7 +11,7 @@ public interface ConnectionSender {
         try {
             return new Connection(host, port);
         } catch (FailedToConnectException | FailedToCreateStreamsException e) {
-            LogManager.getLogger(ConnectionSender.class)
+            LogManager.getRootLogger()
                     .error("Error creating new connection: {}", e.getMessage());
             return null;
         }

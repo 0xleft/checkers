@@ -14,7 +14,7 @@ import uk.wwws.net.exceptions.FailedToCreateStreamsException;
 import uk.wwws.net.threads.ServerConnectionThread;
 
 public class Connection {
-    private static final Logger logger = LogManager.getLogger(Connection.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     private Socket socket;
     private final @NotNull String host;

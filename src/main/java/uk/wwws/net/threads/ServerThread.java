@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import uk.wwws.net.exceptions.FailedToConnectException;
 
 public class ServerThread extends Thread {
-    private static final Logger logger = LogManager.getLogger(ServerThread.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     private final int port;
     private final NewConnectionHandler handler;
@@ -24,7 +24,8 @@ public class ServerThread extends Thread {
         try {
             socket = new ServerSocket(port);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error("Failed to bind to port: {}", port);
+            return;
         }
 
         while (true) {

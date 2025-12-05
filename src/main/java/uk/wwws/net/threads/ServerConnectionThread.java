@@ -7,11 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import uk.wwws.ErrorType;
 import uk.wwws.net.Connection;
 
-/**
- * Client side therad which handles incomming communication from server
- */
 public class ServerConnectionThread extends Thread {
-    private static final Logger logger = LogManager.getLogger(ServerConnectionThread.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     private final ConnectionDataHandler handler;
     private final @NotNull Connection connection;

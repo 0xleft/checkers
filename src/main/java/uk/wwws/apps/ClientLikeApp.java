@@ -25,7 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class ClientLikeApp extends TUI implements ConnectionSender, ConnectionDataHandler {
-    private static final Logger logger = LogManager.getLogger(ClientLikeApp.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
@@ -79,12 +79,12 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
     }
 
     protected void handleGameStart() {
-        logger.debug("Your game has started");
+        logger.info("Your game has started");
         handleState();
     }
 
     protected void handleGameOver() {
-        logger.debug("Game has ended");
+        logger.info("Game has ended");
         handleState();
         game = new CheckersGame();
     }
@@ -116,7 +116,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
     }
 
     protected void handleDisconnect() {
-        logger.debug("Disconnecting from server");
+        logger.info("Disconnecting from server");
         reset();
     }
 
@@ -190,7 +190,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         String host = getNext(data);
         Integer port = getNextInt(data);
 
-        logger.debug("Connecting to: {}:{}", host, port);
+        logger.info("Connecting to: {}:{}", host, port);
 
         if (host == null || port == null) {
             logger.error("Invalid usage. Use: connect <host> <port>");
@@ -209,6 +209,6 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         connectionThread = new ServerConnectionThread(connection, this);
         connectionThread.start();
 
-        logger.debug("Created new connection");
+        logger.info("Created new connection");
     }
 }

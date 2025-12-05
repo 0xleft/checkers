@@ -1,5 +1,6 @@
 package uk.wwws.apps;
 
+import java.net.BindException;
 import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.*;
@@ -26,7 +27,7 @@ import uk.wwws.ui.UI;
 
 public abstract class ServerLikeApp extends TUI
         implements ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
-    private static final Logger logger = LogManager.getLogger(ServerLikeApp.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
@@ -55,20 +56,29 @@ public abstract class ServerLikeApp extends TUI
             return;
         }
 
+        if (serverThread != null) {
+            stopServer();
+        }
+
         this.serverThread = spawnServer(port);
     }
 
     @Override
     public ServerThread spawnServer(int port) {
         ServerThread newServerThread = new ServerThread(port, this);
-        newServerThread.start();
-        logger.debug("Spawned new server");
+        try {
+            newServerThread.start();
+        } catch (Exception e) {
+            logger.error("Port already in use select a different port");
+        }
+
+        logger.info("Spawned new server");
         return newServerThread;
     }
 
     @Override
     public void handleNewConnection(@NotNull Socket socket) {
-        logger.debug("New client connected");
+        logger.info("New client connected");
         ConnectedClientThread client =
                 new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this);
         connections.add(client);
@@ -144,7 +154,7 @@ public abstract class ServerLikeApp extends TUI
     }
 
     private void handleDisconnect(@NotNull Connection c) {
-        logger.debug("Client trying to disconnect");
+        logger.info("Client trying to disconnect");
         if (connectionIsNotAThread(c)) {
             return;
         }
@@ -161,7 +171,7 @@ public abstract class ServerLikeApp extends TUI
         c.write(PacketAction.BYE);
         connections.remove(clientThread);
         queue.remove(player);
-        logger.debug("Client disconnected");
+        logger.info("Client disconnected");
     }
 
     private void handleMove(@NotNull Scanner input, @NotNull Connection c) {
@@ -233,7 +243,7 @@ public abstract class ServerLikeApp extends TUI
         serverThread.interrupt();
         reset();
 
-        logger.debug("Stopped server");
+        logger.info("Stopped server");
     }
 
     private void reset() {

@@ -12,7 +12,7 @@ import uk.wwws.game.players.ConnectedPlayer;
  * Server side thread which handles incomming communication from the client
  */
 public class ConnectedClientThread extends Thread {
-    private static final Logger logger = LogManager.getLogger(ConnectedClientThread.class);
+    private static final Logger logger = LogManager.getRootLogger();
 
     private final @NotNull ConnectedPlayer player;
     private final ConnectionDataHandler handler;
