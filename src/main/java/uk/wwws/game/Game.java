@@ -1,8 +1,8 @@
 package uk.wwws.game;
 
 import java.util.HashSet;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.game.moves.Move;
 
 public interface Game {
     boolean isGameOver();

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import uk.wwws.ErrorType;
 import uk.wwws.ai.DummyAIPlayer;
 import uk.wwws.apps.ClientLikeApp;
-import uk.wwws.game.CheckersMove;
+import uk.wwws.game.moves.CheckersMove;
 import uk.wwws.net.Connection;
 import uk.wwws.net.ConnectionSender;
 import uk.wwws.net.threads.ConnectionDataHandler;

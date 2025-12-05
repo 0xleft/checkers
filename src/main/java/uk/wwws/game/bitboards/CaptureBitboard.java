@@ -20,8 +20,8 @@ public class CaptureBitboard extends PositionedBitboard implements Directional {
                     continue;
                 }
 
-                set(true, i, j);
-                set(true, i, captureRange - 1 - j);
+                setPos(i, j, true);
+                setPos(i, captureRange - 1 - j, true);
             }
         }
     }

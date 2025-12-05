@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import uk.wwws.ErrorType;
 import uk.wwws.game.Checker;
 import uk.wwws.game.CheckersGame;
-import uk.wwws.game.CheckersMove;
+import uk.wwws.game.moves.CheckersMove;
 import uk.wwws.game.Player;
 import uk.wwws.game.players.ConnectedPlayer;
 import uk.wwws.net.Connection;

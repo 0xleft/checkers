@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import uk.wwws.ErrorType;
 import uk.wwws.apps.exceptions.ServerErrorException;
 import uk.wwws.game.*;
+import uk.wwws.game.moves.CheckersMove;
+import uk.wwws.game.moves.Move;
 import uk.wwws.net.Connection;
 import uk.wwws.net.ConnectionSender;
 import uk.wwws.net.PacketAction;

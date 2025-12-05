@@ -60,7 +60,7 @@ public class Bitboard extends BitSet {
         return indexes;
     }
 
-    public void set(boolean value, int row, int col) {
+    public void setPos(int row, int col, boolean value) {
         if (row < 0 || col < 0 || col > boardDim || row * boardDim + col > boardDim * boardDim) {
             return;
         }

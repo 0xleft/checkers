@@ -1,4 +1,4 @@
-package uk.wwws.game;
+package uk.wwws.game.moves;
 
 import java.text.MessageFormat;
 import org.jetbrains.annotations.NotNull;

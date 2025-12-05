@@ -4,6 +4,9 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.game.exceptions.InvalidMoveException;
+import uk.wwws.game.moves.CheckersMove;
+import uk.wwws.game.moves.CheckersMoveGenerator;
+import uk.wwws.game.moves.Move;
 
 public class CheckersGame implements Game {
     private Board board;
@@ -36,14 +39,10 @@ public class CheckersGame implements Game {
     }
 
     @Override
-    public @NotNull HashSet<CheckersMove> getValidMoves() {
-        return MoveGenerator.generateMoves(board, this.turn);
+    public @NotNull HashSet<Move> getValidMoves() {
+        return CheckersMoveGenerator.getInstance().generateMoves(board, this.turn);
     }
 
-    /*@
-        requires move instanceof CheckersMove;
-    */
-    //@ pure
     @Override
     public boolean isValidMove(@NotNull Move move) {
         if (move instanceof CheckersMove checkersMove) {
