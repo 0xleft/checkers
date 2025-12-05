@@ -21,11 +21,14 @@ import uk.wwws.ui.CommandAction;
 import uk.wwws.ui.DataParser;
 import uk.wwws.ui.TUI;
 import uk.wwws.ui.UI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class ClientLikeApp extends TUI implements ConnectionSender, ConnectionDataHandler {
+    private static final Logger logger = LogManager.getLogger(ClientLikeApp.class);
+
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
-
     protected Player player;
 
     protected ClientLikeApp(Player player) {
@@ -55,7 +58,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error occurred in handling data: " + e.getMessage() + "\n" + data);
+            logger.error("Error occurred in handling data: {}\n{}", e.getMessage(), data);
             return ErrorType.ERROR;
         }
 
@@ -71,17 +74,17 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
     }
 
     protected void handleError() throws ServerErrorException {
-        System.out.println("Server sent back an error");
+        logger.error("Server sent back an error");
         throw new ServerErrorException("Server sent back an error");
     }
 
     protected void handleGameStart() {
-        System.out.println("Your game has started");
+        logger.debug("Your game has started");
         handleState();
     }
 
     protected void handleGameOver() {
-        System.out.println("Game has ended");
+        logger.debug("Game has ended");
         handleState();
         game = new CheckersGame();
     }
@@ -89,7 +92,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
     protected void handleColorAssign(@NotNull Scanner input) {
         String data = getNext(input);
         if (data == null) {
-            System.out.println("Received wrong color assign, null");
+            logger.error("Received wrong color assign, null");
             return;
         }
 
@@ -102,7 +105,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         Integer toIndex = getNextInt(data);
 
         if (fromIndex == null || toIndex == null) {
-            System.out.println("Invalid move: from: " + fromIndex + " to: " + toIndex);
+            logger.error("Invalid move: from: {} to: {}", fromIndex, toIndex);
             return;
         }
 
@@ -113,7 +116,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
     }
 
     protected void handleDisconnect() {
-        System.out.println("Disconnecting from server");
+        logger.debug("Disconnecting from server");
         reset();
     }
 
@@ -123,7 +126,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         }
 
         if (game == null) {
-            System.out.println("Not in game");
+            logger.error("Not in game");
             return;
         }
 
@@ -137,14 +140,14 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
             case STATE -> handleState();
             case MOVE -> handleMove(data);
             case QUEUE -> handleQueue();
-            case null, default -> System.out.println(
+            case null, default -> logger.error(
                     "Invalid command or wrong argument usage. Type help to get command list");
         }
     }
 
     protected void handleQueue() {
         if (connectionThread == null) {
-            System.out.println("You need to be connected to send moves");
+            logger.error("You need to be connected to send moves");
             return;
         }
 
@@ -153,17 +156,17 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
 
     protected void handleMove(@NotNull Scanner data) {
         if (connectionThread == null) {
-            System.out.println("You need to be connected to send moves");
+            logger.error("You need to be connected to send moves");
             return;
         }
 
         if (game == null) {
-            System.out.println("You need to be in game to send moves");
+            logger.error("You need to be in game to send moves");
             return;
         }
 
         if (game.getTurn() != this.player) {
-            System.out.println("It's not your turn to move");
+            logger.error("It's not your turn to move");
             // return;
         }
 
@@ -171,7 +174,7 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         Integer to = getNextInt(data);
 
         if (from == null || to == null) {
-            System.out.println("Incorrect usage. Use: move <fromindex> <toindex>");
+            logger.error("Incorrect usage. Use: move <fromindex> <toindex>");
             return;
         }
 
@@ -187,10 +190,10 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         String host = getNext(data);
         Integer port = getNextInt(data);
 
-        System.out.println("Connecting to: " + host + ":" + port);
+        logger.debug("Connecting to: {}:{}", host, port);
 
         if (host == null || port == null) {
-            System.out.println("Invalid usage. Use: connect <host> <port>");
+            logger.error("Invalid usage. Use: connect <host> <port>");
             return;
         }
 
@@ -199,13 +202,13 @@ public abstract class ClientLikeApp extends TUI implements ConnectionSender, Con
         try {
             connection = new Connection(host, port);
         } catch (FailedToConnectException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
             return;
         }
 
         connectionThread = new ServerConnectionThread(connection, this);
         connectionThread.start();
 
-        System.out.println("Created new connection");
+        logger.debug("Created new connection");
     }
 }

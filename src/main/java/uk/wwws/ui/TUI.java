@@ -5,7 +5,7 @@ import java.util.Scanner;
 import org.jetbrains.annotations.Nullable;
 
 abstract public class TUI implements UI {
-    Scanner scanner;
+    private final Scanner scanner;
 
     protected TUI() {
         scanner = new Scanner(System.in);

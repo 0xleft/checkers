@@ -1,6 +1,8 @@
 package uk.wwws.apps.entrypoints;
 
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.ErrorType;
@@ -12,6 +14,8 @@ import uk.wwws.net.ConnectionSender;
 import uk.wwws.net.threads.ConnectionDataHandler;
 
 public class AIApp extends ClientLikeApp implements ConnectionSender, ConnectionDataHandler {
+    private static final Logger logger = LogManager.getLogger(AIApp.class);
+
     private static AIApp instance;
 
     public static AIApp getInstance() {
@@ -33,7 +37,7 @@ public class AIApp extends ClientLikeApp implements ConnectionSender, Connection
     private void sendBestMove() {
         CheckersMove bestMove = (CheckersMove) ((DummyAIPlayer) player).getBestMove(game);
         if (bestMove == null) {
-            System.out.println("No best move exists");
+            logger.error("No best move exists");
             return;
         }
 

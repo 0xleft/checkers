@@ -2,12 +2,13 @@ package uk.wwws.net.threads;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import uk.wwws.net.exceptions.FailedToConnectException;
 
-/**
- * Server thread which listens for client connections and spawns a new thread when acceptable
- */
 public class ServerThread extends Thread {
+    private static final Logger logger = LogManager.getLogger(ServerThread.class);
+
     private final int port;
     private final NewConnectionHandler handler;
     private ServerSocket socket;
@@ -30,8 +31,7 @@ public class ServerThread extends Thread {
             try {
                 handler.handleNewConnection(socket.accept());
             } catch (IOException e) {
-                throw new RuntimeException(
-                        e); // i want to test to see what leads to this then fix // todo
+                logger.error("Error in handling new connection: {}", e.getMessage());
             }
         }
     }

@@ -6,11 +6,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.UUID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.net.exceptions.FailedToConnectException;
 import uk.wwws.net.exceptions.FailedToCreateStreamsException;
+import uk.wwws.net.threads.ServerConnectionThread;
 
 public class Connection {
+    private static final Logger logger = LogManager.getLogger(Connection.class);
+
     private Socket socket;
     private final @NotNull String host;
     private final int port;
@@ -58,7 +63,7 @@ public class Connection {
             out.write(data);
             out.flush();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error writing to connection: {}", e.getMessage());
         }
         return this;
     }

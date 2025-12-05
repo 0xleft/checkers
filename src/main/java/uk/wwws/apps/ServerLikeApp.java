@@ -3,6 +3,8 @@ package uk.wwws.apps;
 import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.ErrorType;
@@ -24,9 +26,10 @@ import uk.wwws.ui.UI;
 
 public abstract class ServerLikeApp extends TUI
         implements ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
+    private static final Logger logger = LogManager.getLogger(ServerLikeApp.class);
+
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
-
     private @Nullable ServerThread serverThread;
 
     public void handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
@@ -34,7 +37,7 @@ public abstract class ServerLikeApp extends TUI
             case START_SERVER -> handleStartServer(data);
             case STOP_SERVER -> stopServer();
             case STATE -> displayState();
-            case null, default -> System.out.println(
+            case null, default -> logger.error(
                     "Invalid command or wrong argument usage. Type help to get command list");
         }
     }
@@ -48,7 +51,7 @@ public abstract class ServerLikeApp extends TUI
         Integer port = getNextInt(data);
 
         if (port == null) {
-            System.out.println("Incorrect usage, should be: start_server <port>");
+            logger.error("Incorrect usage, should be: start_server <port>");
             return;
         }
 
@@ -59,13 +62,13 @@ public abstract class ServerLikeApp extends TUI
     public ServerThread spawnServer(int port) {
         ServerThread newServerThread = new ServerThread(port, this);
         newServerThread.start();
-        System.out.println("Spawned new server");
+        logger.debug("Spawned new server");
         return newServerThread;
     }
 
     @Override
     public void handleNewConnection(@NotNull Socket socket) {
-        System.out.println("New client connected");
+        logger.debug("New client connected");
         ConnectedClientThread client =
                 new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this);
         connections.add(client);
@@ -95,7 +98,7 @@ public abstract class ServerLikeApp extends TUI
 
         Scanner input = new Scanner(data);
 
-        System.out.println("New data: " + data);
+        logger.debug("New data: {}", data);
 
         try {
             switch (PacketAction.valueOf(input.next().toUpperCase())) {
@@ -141,7 +144,7 @@ public abstract class ServerLikeApp extends TUI
     }
 
     private void handleDisconnect(@NotNull Connection c) {
-        System.out.println("Client trying to disconnect");
+        logger.debug("Client trying to disconnect");
         if (connectionIsNotAThread(c)) {
             return;
         }
@@ -158,7 +161,7 @@ public abstract class ServerLikeApp extends TUI
         c.write(PacketAction.BYE);
         connections.remove(clientThread);
         queue.remove(player);
-        System.out.println("Client disconnected");
+        logger.debug("Client disconnected");
     }
 
     private void handleMove(@NotNull Scanner input, @NotNull Connection c) {
@@ -169,7 +172,7 @@ public abstract class ServerLikeApp extends TUI
             fromIndex = input.nextInt();
             toIndex = input.nextInt();
         } catch (NoSuchElementException | IllegalStateException e) {
-            System.out.println("Invalid move packet: " + Arrays.toString(input.tokens().toArray()));
+            logger.error("Invalid move packet: {}", Arrays.toString(input.tokens().toArray()));
             c.write(PacketAction.ERROR);
             return;
         }
@@ -178,14 +181,14 @@ public abstract class ServerLikeApp extends TUI
         CheckersGame game = player.getGame();
         if (game == null) {
             c.write(PacketAction.ERROR);
-            System.out.println("Player of no game tried to make a move");
+            logger.error("Player of no game tried to make a move");
             return;
         }
 
 
         if (game.getTurn() != player) {
             c.write(PacketAction.ERROR);
-            System.out.println("Player tried to move when its not its turn");
+            logger.error("Player tried to move when its not its turn");
             return;
         }
 
@@ -230,7 +233,7 @@ public abstract class ServerLikeApp extends TUI
         serverThread.interrupt();
         reset();
 
-        System.out.println("Stopped server");
+        logger.debug("Stopped server");
     }
 
     private void reset() {

@@ -1,5 +1,6 @@
 package uk.wwws.net;
 
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.net.exceptions.FailedToConnectException;
@@ -10,7 +11,8 @@ public interface ConnectionSender {
         try {
             return new Connection(host, port);
         } catch (FailedToConnectException | FailedToCreateStreamsException e) {
-            System.out.println(e.getMessage());
+            LogManager.getLogger(ConnectionSender.class)
+                    .error("Error creating new connection: {}", e.getMessage());
             return null;
         }
     }
