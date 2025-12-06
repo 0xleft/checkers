@@ -6,9 +6,9 @@ public enum Checker {
     BLACK, WHITE, WHITE_QUEEN, BLACK_QUEEN, EMPTY;
 
     public Checker other() {
-        if (this == BLACK) {
+        if (this.sameColor(BLACK)) {
             return WHITE;
-        } else if (this == WHITE) {
+        } else if (this.sameColor(WHITE)) {
             return BLACK;
         } else {
             return EMPTY;

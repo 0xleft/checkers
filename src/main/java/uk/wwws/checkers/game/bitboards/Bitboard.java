@@ -129,52 +129,27 @@ public class Bitboard extends BitSet {
         return bitboard;
     }
 
-    public @NotNull Bitboard diagonalRay(int range, int row, int col, boolean down) {
-        Bitboard bitboard = new Bitboard(this, boardDim);
+    public static @NotNull Bitboard diagonalRay(int range, int row, int col, boolean down, int boardDim) {
+        Bitboard bitboard = new Bitboard(boardDim);
 
+        // todo simplify since cyclomatic complexity
         for (int i = 0; i < Math.abs(range); i++) {
             if (down) {
-                bitboard.setPos(row + i, col + i, true);
+                if (range < 0) {
+                    bitboard.setPos(row - i, col - i, true);
+                } else {
+                    bitboard.setPos(row + i, col + i, true);
+                }
             } else {
-                bitboard.setPos(row - i, col + i, true);
+                if (range < 0) {
+                    bitboard.setPos(row + i, col - i, true);
+                } else {
+                    bitboard.setPos(row - i, col + i, true);
+                }
             }
         }
 
         return bitboard;
-    }
-
-    /**
-     * Count the amout of bits that are active in that ray. Ray is defined by start and end cols.
-     *
-     * @param startRow
-     * @param startCol
-     * @param endRow
-     * @param endCol
-     * @return the amount of intersected 1st in the ray.
-     */
-    public int intersetDiagonalRay(int startRow, int startCol, int endRow, int endCol) {
-        int temp;
-
-        if (startRow > endRow) {
-            temp = endRow;
-            startRow = endRow;
-            endRow = temp;
-        }
-
-        int count = 0;
-        for (int i = 0; i < endRow - startRow + 1; i++) {
-            if (startCol > endCol) {
-                if (getPos(startRow + i, startCol - i)) {
-                    count++;
-                }
-            } else {
-                if (getPos(startRow + i, startCol + i)) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
     }
 
     @Override
@@ -193,10 +168,6 @@ public class Bitboard extends BitSet {
 
     public static void main(String[] args) {
         Bitboard bitboard = new Bitboard(8);
-        bitboard.set(9);
-        bitboard.set(18);
-        System.out.println(bitboard);
-
-        System.out.println(bitboard.intersetDiagonalRay(0, 2, 2, 0));
+        // System.out.println(bitboard.diagonalRay(-3, 0, 0, false));
     }
 }

@@ -1,13 +1,9 @@
 package uk.wwws.checkers.ui.scenes;
 
 import java.util.Scanner;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -41,12 +37,8 @@ public class GameScene extends StaticScene {
     @Override
     public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
         switch (action) {
-            case BOARD_SYNC -> {
-                drawBoard(perspective);
-            }
-            case DISCONNECT -> {
-                SceneManager.getInstance().loadScene(LobbyScene.class, gui);
-            }
+            case BOARD_SYNC -> drawBoard(perspective);
+            case DISCONNECT -> SceneManager.getInstance().loadScene(LobbyScene.class, gui);
             case GAME_WON -> {
                 controller.stateLabel.setText("You won!");
                 controller.joinQueueButton.setDisable(false);
@@ -65,13 +57,12 @@ public class GameScene extends StaticScene {
                 controller.stateLabel.setText("You joined the queue");
                 controller.joinQueueButton.setText("Leave queue");
             }
-            case YOUR_MOVE -> {
-                controller.stateLabel.setText("It's your turn to move");
-            }
+            case YOUR_MOVE -> controller.stateLabel.setText("It's your turn to move");
             case ASSIGN_COLOR -> {
                 // change perspective variable
                 perspective = Checker.valueOf(data.next());
                 drawBoard(perspective);
+                controller.stateLabel.setText("You are now playing");
                 controller.joinQueueButton.setText("Join queue");
                 controller.joinQueueButton.setDisable(true);
                 controller.giveUpButton.setDisable(false);
@@ -91,14 +82,8 @@ public class GameScene extends StaticScene {
                     rect.setFill(Color.DIMGRAY);
                 }
 
-                GridPane.setConstraints(rect, j, i);
-                GridPane.setFillWidth(rect, true);
-                GridPane.setFillHeight(rect, true);
-                GridPane.setHgrow(rect, Priority.ALWAYS);
-                GridPane.setVgrow(rect, Priority.ALWAYS);
-
+                containGridPiece(rect, j, i);
                 addMoveHandler(rect, i, j);
-
                 controller.gameBoard.getChildren().add(rect);
             }
         }
@@ -112,7 +97,7 @@ public class GameScene extends StaticScene {
         }
 
         Bitboard board = new Bitboard(gui.getApp().getGameState().getBoard().getCheckers(), null,
-                                      Board.DIM); // non empty fields
+                                      Board.DIM); // non-empty fields
 
         board.getOnIndexes().forEach(i -> {
             int row = gui.getApp().getGameState().getBoard().getRow(i);
@@ -134,30 +119,39 @@ public class GameScene extends StaticScene {
         }
     }
 
+    private int getAdjustedRow(int row) {
+        if (perspective == Checker.WHITE) {
+            return row;
+        }
+
+        return Board.DIM - row - 1;
+    }
+
     private void addMoveHandler(@NotNull Node node, int row, int col) {
         node.setOnMouseClicked((MouseEvent _) -> {
-            if (gui.getApp().getGameState().getBoard().getField(row, col) != Checker.EMPTY) {
-                selectedId = gui.getApp().getGameState().getBoard().index(row, col);
-                if (perspective == Checker.BLACK) {
-                    selectedId =
-                            gui.getApp().getGameState().getBoard().index(Board.DIM - row - 1, col);
-                }
+            int adjustedRow = getAdjustedRow(row);
 
+            if (gui.getApp().getGameState().getBoard().getField(adjustedRow, col) !=
+                    Checker.EMPTY) {
+                selectedId = gui.getApp().getGameState().getBoard().index(adjustedRow, col);
                 return;
             }
 
             if (selectedId != -1) {
-                String coords =
-                        selectedId + " " + gui.getApp().getGameState().getBoard().index(row, col);
-
-                if (perspective == Checker.BLACK) {
-                    coords = selectedId + " " +
-                            gui.getApp().getGameState().getBoard().index(Board.DIM - row - 1, col);
-                }
+                String coords = selectedId + " " +
+                        gui.getApp().getGameState().getBoard().index(adjustedRow, col);
 
                 gui.getApp().handleAction(CommandAction.MOVE, new Scanner(coords));
             }
         });
+    }
+
+    private <T extends Node> void containGridPiece(T piece, int row, int col) {
+        GridPane.setConstraints(piece, col, row);
+        GridPane.setFillWidth(piece, true);
+        GridPane.setFillHeight(piece, true);
+        GridPane.setHgrow(piece, Priority.ALWAYS);
+        GridPane.setVgrow(piece, Priority.ALWAYS);
     }
 
     private Circle createMovablePiece(Paint color, int row, int col) {
@@ -166,12 +160,7 @@ public class GameScene extends StaticScene {
 
         circle.setFill(color);
 
-        GridPane.setConstraints(circle, col, row);
-        GridPane.setFillWidth(circle, true);
-        GridPane.setFillHeight(circle, true);
-        GridPane.setHgrow(circle, Priority.ALWAYS);
-        GridPane.setVgrow(circle, Priority.ALWAYS);
-
+        containGridPiece(circle, row, col);
         addMoveHandler(circle, row, col);
 
         return circle;

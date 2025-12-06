@@ -283,7 +283,7 @@ public abstract class ServerLikeApp
                     .write(PacketAction.YOUR_MOVE);
 
             ((ConnectedPlayer) game.getPlayer(Checker.BLACK)).getConnection()
-                    .write(PacketAction.ASSIGN_COLOR, Checker.WHITE.name());
+                    .write(PacketAction.ASSIGN_COLOR, Checker.BLACK.name());
 
             checkQueue();
         }

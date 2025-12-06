@@ -75,10 +75,19 @@ public class CheckersMoveGenerator implements MoveGenerator {
             int row2 = board.getRow(emptyCaptureSquare);
             int col2 = board.getCol(emptyCaptureSquare);
 
-            int intersections = oppPieces.intersetDiagonalRay(row1, col1, row2, col2);
-            // there should only be one intersection which is the enemy piece.
-            if (intersections == 1 && board.getDistance(row1, col1, row2, col2) >= 2) {
-                legalMoves.add(new CheckersMove(index, emptyCaptureSquare));
+            external:
+            for (int i = 0; i < 2; i++) {
+                for (int j = -1; j < 2; j += 2) {
+                    Bitboard rest = new Bitboard(Board.DIM);
+                    rest.setPos(row2, col2, true);
+                    rest.xor(oppPieces);
+                    if (board.getDistance(row1, col1, row2, col2) >= 2 && rest.and(
+                                    Bitboard.diagonalRay(3 * j, row1, col1, i == 0, rest.getBoardDim()))
+                            .getOnIndexes().size() == 2) {
+                        legalMoves.add(new CheckersMove(index, emptyCaptureSquare));
+                        break external;
+                    }
+                }
             }
         }
     }
