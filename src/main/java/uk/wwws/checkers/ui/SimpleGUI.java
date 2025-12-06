@@ -15,10 +15,12 @@ abstract public class SimpleGUI extends GUI {
     public void start(@NotNull Stage stage) {
         super.start(stage);
 
-        SceneManager.getInstance().loadScene(LobbyScene.class, this);
-        stage.setOnCloseRequest((WindowEvent w) -> {
-            handleAction(CommandAction.QUIT, new Scanner(""));
-            System.exit(0);
-        });
+        return;
+
+//        SceneManager.getInstance().loadScene(LobbyScene.class, this);
+//        stage.setOnCloseRequest((WindowEvent w) -> {
+//            handleAction(CommandAction.QUIT, new Scanner(""));
+//            System.exit(0);
+//        });
     }
 }

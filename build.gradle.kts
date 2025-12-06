@@ -26,36 +26,6 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.register<Jar>("jarClient") {
-    archiveBaseName.set("client")
-    from(sourceSets.main.get().output)
-    manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.ClientApp")
-    }
-}
-
-tasks.register<Jar>("jarServer") {
-    archiveBaseName.set("server")
-    from(sourceSets.main.get().output)
-    manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.ServerApp")
-    }
-}
-
-tasks.register<Jar>("jarAI") {
-    archiveBaseName.set("ai")
-    from(sourceSets.main.get().output)
-    manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.AIApp")
-    }
-}
-
-tasks.register("buildAllJars") {
-    dependsOn(tasks.named<Jar>("jarClient"))
-    dependsOn(tasks.named<Jar>("jarServer"))
-    dependsOn(tasks.named<Jar>("jarAI"))
-}
-
 application {
     mainModule.set("uk.wwws.checkers")
     mainClass.set("uk.wwws.checkers.apps.entrypoints.ClientApp")
@@ -79,8 +49,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-jlink {
-    launcher {
-        name = "jarAILauncher" // name of the executable launcher
-    }
-}
+//tasks.jar {
+//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//    archiveBaseName.set("client")
+//    manifest {
+//        attributes["Main-Class"] = "uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher"
+//    }
+//    from({
+//        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+//    })
+//}

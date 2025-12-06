@@ -4,6 +4,7 @@ module uk.wwws.checkers {
     requires javafx.fxml;
     requires javafx.controls;
     requires org.jetbrains.annotations;
+    requires uk.wwws.checkers;
 
     opens uk.wwws.checkers;
     exports uk.wwws.checkers;
