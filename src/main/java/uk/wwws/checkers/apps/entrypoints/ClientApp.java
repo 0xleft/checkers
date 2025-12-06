@@ -21,4 +21,9 @@ public class ClientApp extends ClientLikeApp {
     public static void main(String[] args) {
         ClientApp.getInstance().run();
     }
+
+    @Override
+    public void run() {
+        launch();
+    }
 }

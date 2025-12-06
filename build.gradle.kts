@@ -1,6 +1,5 @@
 plugins {
     java
-    application
     id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
@@ -23,8 +22,52 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-application {
-    mainClass.set("uk.wwws.checkers.apps.entrypoints.ClientApp")
+tasks.register<JavaExec>("runClient") {
+    group = "application"
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+tasks.register<JavaExec>("runServer") {
+    group = "application"
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.ServerApp")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+tasks.register<JavaExec>("runAI") {
+    group = "application"
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+tasks.register<Jar>("jarClient") {
+    group = "build"
+    archiveBaseName.set("client")
+    manifest {
+        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher")
+    }
+    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.register<Jar>("jarAI") {
+    group = "build"
+    archiveBaseName.set("ai")
+    manifest {
+        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
+    }
+    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.register<Jar>("jarServer") {
+    group = "build"
+    archiveBaseName.set("server")
+    manifest {
+        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.ServerApp")
+    }
+    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 javafx {
@@ -43,15 +86,4 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    archiveBaseName.set("client")
-    manifest {
-        attributes["Main-Class"] = "uk.wwws.checkers.apps.entrypoints.ClientApp"
-    }
-    from({
-        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
-    })
 }
