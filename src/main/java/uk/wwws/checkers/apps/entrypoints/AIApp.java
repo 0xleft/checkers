@@ -12,6 +12,7 @@ import uk.wwws.checkers.game.moves.CheckersMove;
 import uk.wwws.checkers.net.Connection;
 import uk.wwws.checkers.net.ConnectionSender;
 import uk.wwws.checkers.net.threads.ConnectionDataHandler;
+import uk.wwws.checkers.ui.SimpleGUI;
 
 public class AIApp extends ClientLikeApp implements ConnectionSender, ConnectionDataHandler {
     private static final Logger logger = LogManager.getRootLogger();
@@ -71,6 +72,8 @@ public class AIApp extends ClientLikeApp implements ConnectionSender, Connection
 
     @Override
     public void run() {
-        launch();
+        this.ui = new SimpleGUI();
+        ui.setApp(this);
+        ui.run();
     }
 }

@@ -1,11 +1,13 @@
 package uk.wwws.checkers.ui.scenes;
 
 import java.io.IOException;
+import java.util.Scanner;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.checkers.ui.CommandAction;
 import uk.wwws.checkers.ui.GUI;
 import uk.wwws.checkers.ui.UI;
 import uk.wwws.checkers.ui.controllers.ReferencedController;
@@ -20,6 +22,8 @@ abstract public class StaticScene {
         SCENE_FILE_URL = sceneFileUrl;
         this.gui = gui;
     }
+
+    abstract public void handleAction(@NotNull CommandAction action, @NotNull Scanner data);
 
     protected void initialize() {
         gui.setLoader(new FXMLLoader());

@@ -2,6 +2,7 @@ package uk.wwws.checkers.apps.entrypoints;
 
 import uk.wwws.checkers.apps.ClientLikeApp;
 import uk.wwws.checkers.game.players.HumanPlayer;
+import uk.wwws.checkers.ui.SimpleGUI;
 
 public class ClientApp extends ClientLikeApp {
     private static ClientApp instance;
@@ -24,6 +25,8 @@ public class ClientApp extends ClientLikeApp {
 
     @Override
     public void run() {
-        launch();
+        this.ui = new SimpleGUI();
+        ui.setApp(this);
+        ui.run();
     }
 }

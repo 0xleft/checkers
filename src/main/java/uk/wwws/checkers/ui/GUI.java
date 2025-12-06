@@ -8,15 +8,25 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.checkers.apps.App;
 import uk.wwws.checkers.ui.scenes.LobbyScene;
 import uk.wwws.checkers.ui.scenes.SceneManager;
 
 abstract public class GUI extends Application implements UI {
     private @Nullable Stage currentStage;
     private @NotNull FXMLLoader loader;
+    protected @Nullable App app;
 
-    protected GUI() {
+    public GUI() {
         loader = new FXMLLoader();
+    }
+
+    public void setApp(@NotNull App app) {
+        this.app = app;
+    }
+
+    public @Nullable App getApp() {
+        return app;
     }
 
     public @NotNull FXMLLoader getLoader() {

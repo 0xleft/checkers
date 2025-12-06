@@ -9,4 +9,11 @@ public class ReferencedController {
     public void setGui(GUI gui) {
         this.gui = gui;
     }
+
+    public ReferencedController(GUI gui) {
+        this.gui = gui;
+    }
+
+    public ReferencedController() {
+    }
 }

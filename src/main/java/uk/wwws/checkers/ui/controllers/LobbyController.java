@@ -1,13 +1,18 @@
 package uk.wwws.checkers.ui.controllers;
 
+import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.wwws.checkers.ErrorType;
+import uk.wwws.checkers.ui.CommandAction;
 import uk.wwws.checkers.ui.GUI;
 import uk.wwws.checkers.ui.UI;
+import uk.wwws.checkers.ui.scenes.GameScene;
+import uk.wwws.checkers.ui.scenes.SceneManager;
 
 public class LobbyController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();
@@ -20,4 +25,23 @@ public class LobbyController extends ReferencedController {
     public TextField portField;
     @FXML
     public Label statusLabel;
+
+    @FXML
+    protected void onJoinButtonAction() {
+        joinButton.setDisable(true);
+        statusLabel.setText("Connecting...");
+        statusLabel.setVisible(true);
+
+        ErrorType err = gui.getApp().handleAction(CommandAction.CONNECT,
+                                   new Scanner(hostnameField.getText() + " " + portField.getText()));
+
+        joinButton.setDisable(false);
+        if (err.isError()) {
+            statusLabel.setVisible(true);
+            statusLabel.setText("Failed to connect...");
+            return;
+        }
+
+        SceneManager.getInstance().loadScene(GameScene.class, gui);
+    }
 }

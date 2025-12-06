@@ -21,37 +21,47 @@ import uk.wwws.checkers.net.threads.ConnectionDataHandler;
 import uk.wwws.checkers.net.threads.NewConnectionHandler;
 import uk.wwws.checkers.net.threads.ServerThread;
 import uk.wwws.checkers.ui.CommandAction;
-import uk.wwws.checkers.ui.SimpleTUI;
+import uk.wwws.checkers.ui.UI;
 
-public abstract class ServerLikeApp extends SimpleTUI
-        implements ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
+public abstract class ServerLikeApp implements App, ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
     private static final Logger logger = LogManager.getRootLogger();
 
+    protected UI ui;
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
     private @Nullable ServerThread serverThread;
 
-    public void handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
+    public @NotNull ErrorType handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
         switch (action) {
-            case START_SERVER -> handleStartServer(data);
-            case STOP_SERVER -> stopServer();
-            case STATE -> displayState();
-            case null, default -> logger.error(
+            case START_SERVER -> {
+                return handleStartServer(data);
+            }
+            case STOP_SERVER -> {
+                return stopServer();
+            }
+            case STATE -> {
+                return displayState();
+            }
+            case null, default -> {
+                logger.error(
                     "Invalid command or wrong argument usage. Type help to get command list");
+                return ErrorType.ERROR;
+            }
         }
     }
 
-    private void displayState() {
+    private @NotNull ErrorType displayState() {
         System.out.println("Size of connections: " + connections.size());
         System.out.println("Queue size: " + queue.size());
+        return ErrorType.NONE;
     }
 
-    private void handleStartServer(@NotNull Scanner data) {
+    private @NotNull ErrorType handleStartServer(@NotNull Scanner data) {
         Integer port = getNextInt(data);
 
         if (port == null) {
             logger.error("Incorrect usage, should be: start_server <port>");
-            return;
+            return ErrorType.ERROR;
         }
 
         if (serverThread != null) {
@@ -59,6 +69,8 @@ public abstract class ServerLikeApp extends SimpleTUI
         }
 
         this.serverThread = spawnServer(port);
+
+        return ErrorType.NONE;
     }
 
     @Override
@@ -233,15 +245,16 @@ public abstract class ServerLikeApp extends SimpleTUI
     }
 
     @Override
-    public void stopServer() {
+    public @NotNull ErrorType stopServer() {
         if (serverThread == null) {
-            return;
+            return ErrorType.ERROR;
         }
 
         serverThread.interrupt();
         reset();
 
         logger.info("Stopped server");
+        return ErrorType.NONE;
     }
 
     private void reset() {

@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.wwws.checkers.ui.controllers.GameController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.wwws.checkers.ui.controllers.GameController">
     <children>
-        <GridPane fx:id="gameBoard" gridLinesVisible="true" layoutX="200.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0">
+        <GridPane fx:id="gameBoard" layoutX="408.0" layoutY="108.0" prefHeight="385.0" prefWidth="385.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -27,8 +27,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-      <Button fx:id="disconnectButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Disconnect" />
-      <Button fx:id="joinQueueButton" layoutX="95.0" layoutY="14.0" mnemonicParsing="false" text="Join queue" />
-      <Label fx:id="stateLabel" layoutX="271.0" layoutY="60.0" text="Connected" />
+      <Button fx:id="disconnectButton" layoutX="247.0" layoutY="270.0" mnemonicParsing="false" text="Disconnect" />
+      <Button fx:id="joinQueueButton" layoutX="248.0" layoutY="305.0" mnemonicParsing="false" text="Join queue" />
+      <Label fx:id="stateLabel" layoutX="571.0" layoutY="72.0" text="Connected" />
     </children>
 </Pane>

@@ -1,6 +1,7 @@
 package uk.wwws.checkers.apps;
 
 import java.util.Scanner;
+import javafx.application.Application;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.ErrorType;
@@ -20,11 +21,13 @@ import uk.wwws.checkers.ui.CommandAction;
 import uk.wwws.checkers.ui.SimpleGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.wwws.checkers.ui.UI;
 
-public abstract class ClientLikeApp extends SimpleGUI
-        implements ConnectionSender, ConnectionDataHandler {
+public abstract class ClientLikeApp
+        implements App, ConnectionSender, ConnectionDataHandler {
     private static final Logger logger = LogManager.getRootLogger();
 
+    protected UI ui;
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
     protected Player player;
@@ -113,54 +116,70 @@ public abstract class ClientLikeApp extends SimpleGUI
         handleState();
     }
 
-    protected void handleDisconnect() {
+    protected @NotNull ErrorType handleDisconnect() {
         logger.info("Disconnecting from server");
         reset();
+        return ErrorType.NONE;
     }
 
-    protected void handleState() {
+    protected @NotNull ErrorType handleState() {
         if (connectionThread != null) {
             System.out.println(connectionThread.getConnection());
         }
 
         if (game == null) {
             logger.error("Not in game");
-            return;
+            return ErrorType.NONE;
         }
 
         System.out.println(game);
+        return ErrorType.NONE;
     }
 
-    public void handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
+    public @NotNull ErrorType handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
         switch (action) {
-            case CONNECT -> handleConnect(data);
-            case DISCONNECT -> handleDisconnect();
-            case STATE -> handleState();
-            case MOVE -> handleMove(data);
-            case QUEUE -> handleQueue();
-            case null, default -> logger.error(
-                    "Invalid command or wrong argument usage. Type help to get command list");
+            case CONNECT -> {
+                return handleConnect(data);
+            }
+            case DISCONNECT -> {
+                return handleDisconnect();
+            }
+            case STATE -> {
+                return handleState();
+            }
+            case MOVE -> {
+                return handleMove(data);
+            }
+            case QUEUE -> {
+                return handleQueue();
+            }
+            case null, default -> {
+                logger.error(
+                        "Invalid command or wrong argument usage. Type help to get command list");
+                return ErrorType.ERROR;
+            }
         }
     }
 
-    protected void handleQueue() {
+    protected @NotNull ErrorType handleQueue() {
         if (connectionThread == null) {
             logger.error("You need to be connected to send moves");
-            return;
+            return ErrorType.ERROR;
         }
 
         connectionThread.getConnection().write(PacketAction.QUEUE);
+        return ErrorType.NONE;
     }
 
-    protected void handleMove(@NotNull Scanner data) {
+    protected @NotNull ErrorType handleMove(@NotNull Scanner data) {
         if (connectionThread == null) {
             logger.error("You need to be connected to send moves");
-            return;
+            return ErrorType.ERROR;
         }
 
         if (game == null) {
             logger.error("You need to be in game to send moves");
-            return;
+            return ErrorType.ERROR;
         }
 
         if (game.getTurn() != this.player) {
@@ -173,10 +192,12 @@ public abstract class ClientLikeApp extends SimpleGUI
 
         if (from == null || to == null) {
             logger.error("Incorrect usage. Use: move <fromindex> <toindex>");
-            return;
+            return ErrorType.ERROR;
         }
 
         sendMove(new CheckersMove(from, to));
+
+        return ErrorType.NONE;
     }
 
     protected void sendMove(@NotNull CheckersMove move) {
@@ -184,7 +205,7 @@ public abstract class ClientLikeApp extends SimpleGUI
                 .write(PacketAction.MOVE, move.startIndex() + " " + move.endIndex());
     }
 
-    protected void handleConnect(@NotNull Scanner data) {
+    protected @NotNull ErrorType handleConnect(@NotNull Scanner data) {
         String host = getNext(data);
         Integer port = getNextInt(data);
 
@@ -192,7 +213,7 @@ public abstract class ClientLikeApp extends SimpleGUI
 
         if (host == null || port == null) {
             logger.error("Invalid usage. Use: connect <host> <port>");
-            return;
+            return ErrorType.ERROR;
         }
 
         Connection connection;
@@ -201,12 +222,13 @@ public abstract class ClientLikeApp extends SimpleGUI
             connection = new Connection(host, port);
         } catch (FailedToConnectException e) {
             logger.error(e.getMessage());
-            return;
+            return ErrorType.ERROR;
         }
 
         connectionThread = new ServerConnectionThread(connection, this);
         connectionThread.start();
 
         logger.info("Created new connection");
+        return ErrorType.NONE;
     }
 }

@@ -1,6 +1,7 @@
 package uk.wwws.checkers.apps.entrypoints;
 
 import uk.wwws.checkers.apps.ServerLikeApp;
+import uk.wwws.checkers.ui.TUI;
 
 public class ServerApp extends ServerLikeApp {
 
@@ -16,5 +17,12 @@ public class ServerApp extends ServerLikeApp {
 
     public static void main(String[] args) {
         ServerApp.getInstance().run();
+    }
+
+    @Override
+    public void run() {
+        this.ui = new TUI();
+        ui.setApp(this);
+        ui.run();
     }
 }
