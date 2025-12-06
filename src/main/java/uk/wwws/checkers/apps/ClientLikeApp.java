@@ -91,7 +91,6 @@ public abstract class ClientLikeApp
 
     protected void handleGameOver() {
         logger.info("Game has ended");
-        handleState();
         game = new CheckersGame();
         ui.handleAction(UIAction.GAMEOVER, null, true);
     }

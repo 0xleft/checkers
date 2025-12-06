@@ -26,6 +26,7 @@ public class GameScene extends StaticScene {
     private static final Logger logger = LogManager.getRootLogger();
 
     private GameController controller;
+    private Checker perspective = Checker.WHITE;
 
     public GameScene(@NotNull GUI gui) {
         super("Game.fxml", gui);
@@ -35,16 +36,19 @@ public class GameScene extends StaticScene {
     public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
         switch (action) {
             case BOARD_SYNC -> {
-                // sync board
+                drawBoard(perspective);
             }
             case DISCONNECT -> {
                 SceneManager.getInstance().loadScene(LobbyScene.class, gui);
             }
             case GAMEOVER -> {
-
+                controller.stateLabel.setText("Your game has ended");
+                drawBoard(perspective);
             }
             case ASSIGN_COLOR -> {
-
+                // change perspective variable
+                perspective = Checker.valueOf(data.next());
+                drawBoard(perspective);
             }
         }
     }
@@ -111,6 +115,8 @@ public class GameScene extends StaticScene {
         GridPane.setFillHeight(circle, true);
         GridPane.setHgrow(circle, Priority.ALWAYS);
         GridPane.setVgrow(circle, Priority.ALWAYS);
+
+        
 
         controller.gameBoard.getChildren().add(circle);
     }

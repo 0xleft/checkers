@@ -153,6 +153,11 @@ public abstract class ServerLikeApp implements App, ConnectionReceiver, Connecti
             return;
         }
 
+        if (player.getGame() != null) { //player is already in a game
+            player.getConnection().write(PacketAction.ERROR);
+            return;
+        }
+
         queue.add(player);
         checkQueue();
     }
@@ -170,6 +175,7 @@ public abstract class ServerLikeApp implements App, ConnectionReceiver, Connecti
             return;
         }
 
+        // TODO figure out why other players are not getting notified
         ConnectedClientThread clientThread = getConnectedPlayer(c);
         ConnectedPlayer player = clientThread.getPlayer();
         if (player.getGame() != null) {
