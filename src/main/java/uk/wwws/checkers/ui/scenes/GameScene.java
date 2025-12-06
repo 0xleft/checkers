@@ -28,7 +28,20 @@ public class GameScene extends StaticScene {
 
     @Override
     public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
+        switch (action) {
+            case BOARD_SYNC -> {
+                // sync board
+            }
+            case DISCONNECT -> {
+                SceneManager.getInstance().loadScene(LobbyScene.class, gui);
+            }
+            case GAMEOVER -> {
 
+            }
+            case ASSIGN_COLOR -> {
+
+            }
+        }
     }
 
     @Override

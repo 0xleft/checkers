@@ -19,13 +19,15 @@ public class LobbyScene extends StaticScene {
 
     @Override
     public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
-
+        switch (action) {
+            case CONNECTED -> {
+                SceneManager.getInstance().loadScene(GameScene.class, gui);
+            }
+        }
     }
 
     @Override
     public void initialize() {
         super.initialize();
-
-        LobbyController controller = gui.getLoader().getController();
     }
 }

@@ -51,6 +51,7 @@ public class ConnectedClientThread extends Thread {
             }
         }
 
+        // send null so client disconnects
         handler.handleData(null, this.player.getConnection());
     }
 }

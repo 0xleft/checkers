@@ -32,6 +32,7 @@ public class LobbyController extends ReferencedController {
         statusLabel.setText("Connecting...");
         statusLabel.setVisible(true);
 
+        // todo handle null pointer however at this point if its null here a lot more shit is realdy fucked up
         ErrorType err = gui.getApp().handleAction(CommandAction.CONNECT,
                                    new Scanner(hostnameField.getText() + " " + portField.getText()));
 
@@ -39,9 +40,6 @@ public class LobbyController extends ReferencedController {
         if (err.isError()) {
             statusLabel.setVisible(true);
             statusLabel.setText("Failed to connect...");
-            return;
         }
-
-        SceneManager.getInstance().loadScene(GameScene.class, gui);
     }
 }

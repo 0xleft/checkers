@@ -1,12 +1,22 @@
 package uk.wwws.checkers.ui;
 
 import java.util.Scanner;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.apps.App;
 
 public interface UI {
+    default void handleAction(@NotNull UIAction action, @Nullable Scanner data, boolean defer) {
+        if (defer) {
+            Platform.runLater(() -> {
+                handleAction(action, data);
+            });
+        } else {
+            handleAction(action, data);
+        }
+    }
     void handleAction(@NotNull UIAction action, @Nullable Scanner data);
     void run();
 

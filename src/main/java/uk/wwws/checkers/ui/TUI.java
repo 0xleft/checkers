@@ -28,9 +28,7 @@ public class TUI implements UI, DataParser {
     }
 
     @Override
-    public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
-        
-    }
+    public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {}
 
     public void run() {
         if (app == null) {
@@ -43,6 +41,7 @@ public class TUI implements UI, DataParser {
             CommandAction nextAction = getNextCommandAction(scanner);
             if (nextAction == CommandAction.QUIT) {
                 stop = true;
+                app.handleAction(CommandAction.STOP_SERVER, scanner);
                 continue;
             }
             app.handleAction(nextAction, scanner);

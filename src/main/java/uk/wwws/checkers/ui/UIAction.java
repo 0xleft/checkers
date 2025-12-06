@@ -1,7 +1,9 @@
 package uk.wwws.checkers.ui;
 
 public enum UIAction {
-    PRINT,
     BOARD_SYNC,
-    DISCONNECT
+    DISCONNECT,
+    CONNECTED,
+    ASSIGN_COLOR,
+    GAMEOVER
 }

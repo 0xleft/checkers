@@ -20,6 +20,7 @@ import uk.wwws.checkers.ui.CommandAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.ui.UI;
+import uk.wwws.checkers.ui.UIAction;
 
 public abstract class ClientLikeApp
         implements App, ConnectionSender, ConnectionDataHandler {
@@ -29,6 +30,10 @@ public abstract class ClientLikeApp
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
     protected Player player;
+
+    public CheckersGame getGame() {
+        return game;
+    }
 
     protected ClientLikeApp(Player player) {
         this.player = player;
@@ -80,12 +85,14 @@ public abstract class ClientLikeApp
     protected void handleGameStart() {
         logger.info("Your game has started");
         handleState();
+        ui.handleAction(UIAction.BOARD_SYNC, null, true);
     }
 
     protected void handleGameOver() {
         logger.info("Game has ended");
         handleState();
         game = new CheckersGame();
+        ui.handleAction(UIAction.GAMEOVER, null, true);
     }
 
     protected void handleColorAssign(@NotNull Scanner input) {
@@ -97,6 +104,7 @@ public abstract class ClientLikeApp
 
         Checker color = Checker.valueOf(data.toUpperCase());
         game.addPlayer(this.player, color);
+        ui.handleAction(UIAction.ASSIGN_COLOR, new Scanner(data), true);
     }
 
     public void handleReceiveMove(@NotNull Scanner data) {
@@ -112,17 +120,19 @@ public abstract class ClientLikeApp
 
         game.doMove(move);
         handleState();
+        ui.handleAction(UIAction.BOARD_SYNC, null, true);
     }
 
     protected @NotNull ErrorType handleDisconnect() {
         logger.info("Disconnecting from server");
         reset();
+        ui.handleAction(UIAction.DISCONNECT, null, true);
         return ErrorType.NONE;
     }
 
     protected @NotNull ErrorType handleState() {
         if (connectionThread != null) {
-            System.out.println(connectionThread.getConnection());
+            logger.info(connectionThread.getConnection());
         }
 
         if (game == null) {
@@ -130,7 +140,7 @@ public abstract class ClientLikeApp
             return ErrorType.NONE;
         }
 
-        System.out.println(game);
+        logger.info(game);
         return ErrorType.NONE;
     }
 
@@ -227,6 +237,7 @@ public abstract class ClientLikeApp
         connectionThread.start();
 
         logger.info("Created new connection");
+        ui.handleAction(UIAction.CONNECTED, null, true);
         return ErrorType.NONE;
     }
 }
