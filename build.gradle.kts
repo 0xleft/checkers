@@ -1,10 +1,7 @@
 plugins {
     java
     application
-    groovy
-    id("org.javamodularity.moduleplugin") version "1.8.15"
-    id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 group = "uk.wwws"
@@ -27,13 +24,12 @@ tasks.withType<JavaCompile> {
 }
 
 application {
-    mainModule.set("uk.wwws.checkers")
     mainClass.set("uk.wwws.checkers.apps.entrypoints.ClientApp")
 }
 
 javafx {
     version = "21.0.6"
-    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing", "javafx.media")
+    modules = listOf("javafx.controls", "javafx.fxml")
 }
 
 dependencies {
@@ -49,13 +45,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-//tasks.jar {
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-//    archiveBaseName.set("client")
-//    manifest {
-//        attributes["Main-Class"] = "uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher"
-//    }
-//    from({
-//        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
-//    })
-//}
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveBaseName.set("client")
+    manifest {
+        attributes["Main-Class"] = "uk.wwws.checkers.apps.entrypoints.ClientApp"
+    }
+    from({
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+    })
+}
