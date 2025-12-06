@@ -12,6 +12,7 @@ import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.CheckersGame;
 import uk.wwws.checkers.game.Game;
 import uk.wwws.checkers.game.Player;
+import uk.wwws.checkers.game.exceptions.InvalidMoveException;
 import uk.wwws.checkers.game.moves.CheckersMove;
 import uk.wwws.checkers.game.players.ConnectedPlayer;
 import uk.wwws.checkers.net.Connection;
@@ -248,10 +249,22 @@ public abstract class ServerLikeApp
             return;
         }
 
-        player.getGame().doMove(new CheckersMove(fromIndex, toIndex));
+        try {
+            player.getGame().doMove(new CheckersMove(fromIndex, toIndex));
+        } catch (InvalidMoveException e) {
+            logger.error("Player tried to play invalid move: {} to {}", fromIndex, toIndex);
+            c.write(PacketAction.YOUR_MOVE);
+            return;
+        }
+
         for (Player otherPlayer : game.getPlayers()) {
             ((ConnectedPlayer) otherPlayer).getConnection()
                     .write(PacketAction.MOVE, MessageFormat.format("{0} {1}", fromIndex, toIndex));
+        }
+
+        // send your move to next player
+        if (player.getGame().getTurn() instanceof ConnectedPlayer cp) {
+            cp.getConnection().write(PacketAction.YOUR_MOVE);
         }
 
         if (game.isGameOver()) {
@@ -267,13 +280,8 @@ public abstract class ServerLikeApp
             ConnectedPlayer player1 = queue.poll();
             ConnectedPlayer player2 = queue.poll();
             // todo this randomization needs to be moved inside the game
-            if (Math.random() >= 0.5) {
-                game.addPlayer(player1, Checker.WHITE);
-                game.addPlayer(player2, Checker.BLACK);
-            } else {
-                game.addPlayer(player2, Checker.WHITE);
-                game.addPlayer(player1, Checker.BLACK);
-            }
+            game.addPlayer(player1, Checker.WHITE);
+            game.addPlayer(player2, Checker.BLACK);
 
             player1.setGame(game);
             player2.setGame(game);
