@@ -30,7 +30,7 @@ public class AIApp extends ClientLikeApp implements ConnectionSender, Connection
         super(new DummyAIPlayer());
     }
 
-    static void main() {
+    public static void main(String[] args) {
         AIApp.getInstance().run();
     }
 

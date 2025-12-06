@@ -17,9 +17,11 @@ import uk.wwws.checkers.net.exceptions.FailedToConnectException;
 import uk.wwws.checkers.net.threads.ConnectionDataHandler;
 import uk.wwws.checkers.net.threads.ServerConnectionThread;
 import uk.wwws.checkers.ui.CommandAction;
+import uk.wwws.checkers.ui.GUI;
 import uk.wwws.checkers.ui.SimpleGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.wwws.checkers.ui.SimpleTUI;
 
 public abstract class ClientLikeApp extends SimpleGUI
         implements ConnectionSender, ConnectionDataHandler {
@@ -39,6 +41,7 @@ public abstract class ClientLikeApp extends SimpleGUI
         if (data == null) {
             reset();
             return ErrorType.FATAL;
+
         }
 
         Scanner input = new Scanner(data);
