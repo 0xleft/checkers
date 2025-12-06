@@ -47,7 +47,9 @@ tasks.register<Jar>("jarClient") {
     manifest {
         attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher")
     }
-    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    from(
+        sourceSets["main"].runtimeClasspath,
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -57,7 +59,9 @@ tasks.register<Jar>("jarAI") {
     manifest {
         attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
     }
-    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    from(
+        sourceSets["main"].runtimeClasspath,
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -67,13 +71,15 @@ tasks.register<Jar>("jarServer") {
     manifest {
         attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.ServerApp")
     }
-    from(sourceSets["main"].runtimeClasspath, configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    from(
+        sourceSets["main"].runtimeClasspath,
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.register("jarAll") {
     group = "build"
-    dependsOn("jarAI", "jarServer", "jarClient")
+    dependsOn("clean", "jarAI", "jarServer", "jarClient")
 }
 
 javafx {
