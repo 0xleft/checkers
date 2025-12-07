@@ -10,8 +10,6 @@ repositories {
     mavenCentral()
 }
 
-val junitVersion = "5.12.1"
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
@@ -26,21 +24,21 @@ tasks.register<JavaExec>("runClient") {
     group = "application"
     mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher")
     classpath = sourceSets["main"].runtimeClasspath
-    standardInput = System.`in`;
+    standardInput = System.`in`
 }
 
 tasks.register<JavaExec>("runServer") {
     group = "application"
     mainClass.set("uk.wwws.checkers.apps.entrypoints.ServerApp")
     classpath = sourceSets["main"].runtimeClasspath
-    standardInput = System.`in`;
+    standardInput = System.`in`
 }
 
 tasks.register<JavaExec>("runAI") {
     group = "application"
     mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
     classpath = sourceSets["main"].runtimeClasspath
-    standardInput = System.`in`;
+    standardInput = System.`in`
 }
 
 tasks.register<Jar>("jarClient") {
@@ -90,14 +88,14 @@ javafx {
 }
 
 dependencies {
-    implementation("org.controlsfx:controlsfx:11.2.1")
     implementation("org.jetbrains:annotations:23.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation("org.apache.logging.log4j:log4j-api:2.22.0")
     implementation("org.apache.logging.log4j:log4j-core:2.22.0")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }

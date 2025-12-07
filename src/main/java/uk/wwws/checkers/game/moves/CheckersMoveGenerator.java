@@ -85,15 +85,14 @@ public class CheckersMoveGenerator implements MoveGenerator {
                                                         rest.getBoardDim());
 
                     // make sure the ray captures the empty square
-                    if (rest.and(ray).getOnIndexes().size() != 1) {
+                    if (rest.and(ray).cardinality() != 1) {
                         continue;
                     }
 
                     rest.xor(oppPieces);
-                    System.out.println(rest + " " + piceRow + " " + pieceCol);
 
                     if (board.getDistance(piceRow, pieceCol, emptyCaptureRow, emptyCaptureCol) >=
-                            2 && rest.and(ray).getOnIndexes().size() == 2) {
+                            2 && rest.and(ray).cardinality() == 2) {
                         legalMoves.add(new CheckersMove(index, emptyCaptureSquare));
                         break external;
                     }

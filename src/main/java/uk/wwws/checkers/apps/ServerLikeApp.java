@@ -242,7 +242,6 @@ public abstract class ServerLikeApp
             return;
         }
 
-
         if (game.getTurn() != player) {
             c.write(PacketAction.ERROR);
             logger.error("Player tried to move when its not its turn");
@@ -253,7 +252,9 @@ public abstract class ServerLikeApp
             player.getGame().doMove(new CheckersMove(fromIndex, toIndex));
         } catch (InvalidMoveException e) {
             logger.error("Player tried to play invalid move: {} to {}", fromIndex, toIndex);
-            c.write(PacketAction.YOUR_MOVE);
+            if (player.getGame().getTurn() == player) {
+                c.write(PacketAction.YOUR_MOVE);
+            }
             return;
         }
 
@@ -267,6 +268,7 @@ public abstract class ServerLikeApp
             cp.getConnection().write(PacketAction.YOUR_MOVE);
         }
 
+        // handle game over
         if (game.isGameOver()) {
             for (Player otherPlayer : game.getPlayers()) {
                 handleGameEnd(otherPlayer);
