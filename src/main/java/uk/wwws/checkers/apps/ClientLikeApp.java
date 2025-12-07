@@ -27,6 +27,16 @@ public abstract class ClientLikeApp
         implements App, ConnectionSender, ConnectionDataHandler {
     private static final Logger logger = LogManager.getRootLogger();
 
+    private static final @NotNull String HELP_MENU = """
+           CONNECT <hostname> <port>   connects to a server with given hostname and port.
+           DISCONNECT                  disconnects from the server.
+           STATE                       prints the state of the application.
+           MOVE                        <fromIndex> <toIndex> sends a move to the server with the given indecision.
+           QUEUE                       sends queue command to the server. If we are already in the
+                                       queue server will remove us from there, otherwise we will be put in a queue.
+           GIVE_UP                     sends a give up command to the server.
+           HELP                        prints this menu.
+           QUIT                        closes the application""";
     protected UI ui;
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
@@ -183,12 +193,20 @@ public abstract class ClientLikeApp
             case GIVE_UP -> {
                 return handleGiveUp();
             }
+            case HELP -> {
+                return handleHelpMenu();
+            }
             case null, default -> {
                 logger.error(
                         "Invalid command or wrong argument usage. Type help to get command list");
                 return ErrorType.ERROR;
             }
         }
+    }
+
+    private @NotNull ErrorType handleHelpMenu() {
+        logger.info(HELP_MENU);
+        return ErrorType.NONE;
     }
 
     protected @NotNull ErrorType handleGiveUp() {

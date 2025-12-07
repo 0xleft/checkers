@@ -29,6 +29,12 @@ public abstract class ServerLikeApp
         implements App, ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
     private static final Logger logger = LogManager.getRootLogger();
 
+    private static final @NotNull String HELP_MENU = """
+            START_SERVER <port> starts the server on a given port.
+            STOP_SERVER         stops the server.
+            STATE               prints the state of the server.
+            HELP                prints this menu
+            QUIT                closes the application""";
     protected UI ui;
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
@@ -45,12 +51,20 @@ public abstract class ServerLikeApp
             case STATE -> {
                 return displayState();
             }
+            case HELP -> {
+                return handleHelpMenu();
+            }
             case null, default -> {
                 logger.error(
                         "Invalid command or wrong argument usage. Type help to get command list");
                 return ErrorType.ERROR;
             }
         }
+    }
+
+    private @NotNull ErrorType handleHelpMenu() {
+        logger.info(HELP_MENU);
+        return ErrorType.NONE;
     }
 
     private @NotNull ErrorType displayState() {
