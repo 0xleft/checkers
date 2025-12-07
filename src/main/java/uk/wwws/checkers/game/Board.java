@@ -1,12 +1,14 @@
 package uk.wwws.checkers.game;
 
+import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 
 public class Board {
     public static final int DIM = 8;
-    private Checker[] fields = new Checker[DIM * DIM];
+    private Checker[] fields;
 
     public Board() {
+        empty();
         defaultBoard();
     }
 
@@ -33,32 +35,22 @@ public class Board {
         }
     }
 
-    //@ pure
     public int getCol(int index) {
         return index % DIM;
     }
 
-    //@ pure
     public int getRow(int index) {
         return index / DIM;
     }
 
-    //@ pure
     public int index(int row, int col) {
         return row * DIM + col;
     }
 
-    //@ pure
     public boolean isField(int index) {
         return (0 <= index) && (index < DIM * DIM);
     }
 
-    //@ pure
-    public boolean isField(int row, int col) {
-        return isField(index(row, col));
-    }
-
-    //@ pure
     public Checker getField(int i) {
         if (i >= DIM * DIM) {
             return Checker.EMPTY;
@@ -142,6 +134,11 @@ public class Board {
 
     public void setField(int row, int col, @NotNull Checker c) {
         this.fields[index(row, col)] = c;
+    }
+
+    public void empty() {
+        this.fields = new Checker[DIM * DIM];
+        Arrays.fill(this.fields, Checker.EMPTY);
     }
 
     public boolean shouldPromote(int index) {

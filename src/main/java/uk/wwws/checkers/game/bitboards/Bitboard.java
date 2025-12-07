@@ -1,5 +1,6 @@
 package uk.wwws.checkers.game.bitboards;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -67,14 +68,6 @@ public class Bitboard extends BitSet {
         super.set(row * boardDim + col, value);
     }
 
-    public boolean getPos(int row, int col) {
-        if (row < 0 || col < 0 || col >= boardDim || row * boardDim + col > boardDim * boardDim) {
-            return false;
-        }
-
-        return super.get(row * boardDim + col);
-    }
-
     public @NotNull Set<Integer> getOnIndexes() {
         return getMaskIndexes(true);
     }
@@ -103,7 +96,7 @@ public class Bitboard extends BitSet {
         return bitboard;
     }
 
-    protected @NotNull Bitboard shiftH(int n) {
+    public @NotNull Bitboard shiftH(int n) {
         Bitboard bitboard = new Bitboard(boardDim);
 
         for (int i = 0; i < size(); i++) {
@@ -117,7 +110,7 @@ public class Bitboard extends BitSet {
         return bitboard;
     }
 
-    protected @NotNull Bitboard shiftV(int n) {
+    public @NotNull Bitboard shiftV(int n) {
         Bitboard bitboard = new Bitboard(boardDim);
 
         for (int i = 0; i < size(); i++) {
@@ -166,8 +159,12 @@ public class Bitboard extends BitSet {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        Bitboard bitboard = new Bitboard(8);
-        // System.out.println(bitboard.diagonalRay(-3, 0, 0, false));
+    @Override
+    public boolean equals(@NotNull Object obj) {
+        if (obj instanceof Bitboard b) {
+            return Arrays.equals(this.toByteArray(), b.toByteArray());
+        }
+
+        return false;
     }
 }

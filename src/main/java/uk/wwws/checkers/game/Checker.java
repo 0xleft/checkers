@@ -1,6 +1,7 @@
 package uk.wwws.checkers.game;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum Checker {
     BLACK, WHITE, WHITE_QUEEN, BLACK_QUEEN, EMPTY;
@@ -29,7 +30,11 @@ public enum Checker {
         }
     }
 
-    public boolean sameColor(@NotNull Checker c) {
+    public boolean sameColor(@Nullable Checker c) {
+        if (c == null) {
+            return false;
+        }
+
         return this.toString().equalsIgnoreCase(c.toString());
     }
 
