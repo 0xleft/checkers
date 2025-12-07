@@ -23,17 +23,32 @@ public class CheckersMoveGenerator implements MoveGenerator {
         return instance;
     }
 
+    static void main() {
+        Board a = new Board();
+
+        System.out.print(a);
+
+        System.out.println(CheckersMoveGenerator.getInstance().generateMoves(a, Checker.WHITE));
+    }
+
     public HashSet<Move> generateMoves(@NotNull Board board, @NotNull Checker turn) {
+        HashSet<Move> captureMoves = new HashSet<>();
         HashSet<Move> legalMoves = new HashSet<>();
 
         for (int i = 0; i < Board.DIM * Board.DIM; i++) {
             if (board.getField(i).sameColor(turn)) {
+                generateCapturesForPiece(board, i, captureMoves);
                 generateMovesForPiece(board, i, legalMoves);
-                generateCapturesForPiece(board, i, legalMoves);
             }
         }
 
-        return legalMoves;
+        // If there are no capture moves, any move is legal.
+        if (captureMoves.isEmpty()) {
+            return legalMoves;
+        }
+
+        // If there are captures, those are mandatory.
+        return captureMoves;
     }
 
     private void generateMovesForPiece(@NotNull Board board, int index,
@@ -112,14 +127,6 @@ public class CheckersMoveGenerator implements MoveGenerator {
         }
 
         return bitboard.backward();
-    }
-
-    static void main() {
-        Board a = new Board();
-
-        System.out.print(a);
-
-        System.out.println(CheckersMoveGenerator.getInstance().generateMoves(a, Checker.WHITE));
     }
 }
 
