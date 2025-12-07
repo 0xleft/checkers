@@ -47,63 +47,16 @@ public class Board {
         return row * DIM + col;
     }
 
-    public boolean isField(int index) {
-        return (0 <= index) && (index < DIM * DIM);
-    }
-
-    public Checker getField(int i) {
-        if (i >= DIM * DIM) {
+    public @NotNull Checker getField(int i) {
+        if (i >= DIM * DIM || i < 0) {
             return Checker.EMPTY;
         }
 
         return this.fields[i];
     }
 
-    //@ pure
-    public Checker getField(int row, int col) {
+    public @NotNull Checker getField(int row, int col) {
         return getField(index(row, col));
-    }
-
-    //@ pure
-    public boolean isEmptyField(int i) {
-        return getField(i) == Checker.EMPTY;
-    }
-
-    //@ pure
-    public boolean isEmptyField(int row, int col) {
-        if (row < 0 || col > 7) {
-            return false;
-        }
-
-        return isEmptyField(index(row, col));
-    }
-
-    /*@
-        requires c == Checker.WHITE || c == Checker.BLACK;
-    */
-    public boolean isOnlyChecker(@NotNull Checker c) {
-        for (int i = 0; i < DIM * DIM; i++) {
-            if (getField(i) != c && getField(i) != c.queen()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    //@ pure
-    public boolean isEmpty() {
-        return isOnlyChecker(Checker.EMPTY);
-    }
-
-    //@ pure
-    public boolean gameOver() {
-        return hasWinner() || isEmpty();
-    }
-
-    //@ pure
-    public boolean isWinner(@NotNull Checker c) {
-        return isOnlyChecker(c);
     }
 
     public @NotNull String toString() {
@@ -119,21 +72,12 @@ public class Board {
         return s.toString();
     }
 
-    //@ pure
-    public boolean hasWinner() {
-        return isWinner(Checker.WHITE) || isWinner(Checker.BLACK);
-    }
-
-    public void reset() {
-        this.fields = new Board().fields;
-    }
-
     public void setField(int i, @NotNull Checker c) {
         this.fields[i] = c;
     }
 
     public void setField(int row, int col, @NotNull Checker c) {
-        this.fields[index(row, col)] = c;
+        this.setField(index(row, col), c);
     }
 
     public void empty() {

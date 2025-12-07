@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BitboardTests {
 
-    private static int BOARD_DIM = 8;
+    private static final int BOARD_DIM = 8;
     private Bitboard bitboard1;
     private Bitboard bitboard2;
     private Board board;
