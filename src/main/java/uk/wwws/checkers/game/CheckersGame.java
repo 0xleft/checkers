@@ -21,11 +21,10 @@ public class CheckersGame implements Game {
         turn = Checker.WHITE;
     }
 
-    public void setSetLoser(@NotNull Player setLoser) {
+    public void setSetLoser(@Nullable Player setLoser) {
         this.setLoser = setLoser;
     }
 
-    //@ pure
     @Override
     public boolean isGameOver() {
         return getWinner() != null;
@@ -34,6 +33,10 @@ public class CheckersGame implements Game {
     @Override
     public @Nullable Player getTurn() {
         return players.get(turn);
+    }
+
+    public @NotNull Checker getSideToMove() {
+        return turn;
     }
 
     private @Nullable Player getOtherPlayer(@NotNull Player player) {
@@ -91,9 +94,9 @@ public class CheckersGame implements Game {
             if (board.shouldPromote(checkersMove.endIndex())) {
                 resolvePromotion(checkersMove);
             }
-        }
 
-        this.turn = turn.other();
+            this.turn = turn.other();
+        }
     }
 
     @Override
@@ -127,26 +130,18 @@ public class CheckersGame implements Game {
     }
 
     public void addPlayer(@NotNull Player player, @NotNull Checker c) {
+        if (c == Checker.EMPTY) {
+            return;
+        }
+
         if (players.get(c) != null) {
             return;
         }
         players.put(c, player);
     }
 
-    public void resetPlayers() {
-        players.clear();
-    }
-
     @Override
     public String toString() {
-        return board.toString() + "\n" + players + "\n" + turn + "\n" + getValidMoves();
-    }
-
-    public static void main(String[] args) {
-        CheckersGame g = new CheckersGame();
-        g.doMove(CheckersMoveGenerator.getInstance().generateMoves(g.getBoard(), g.turn).stream().findFirst().get());
-        System.out.println(g.board);
-        g.doMove(CheckersMoveGenerator.getInstance().generateMoves(g.getBoard(), g.turn).stream().findFirst().get());
-        System.out.println(g.board);
+        return board + "\n" + players + "\n" + turn + "\n" + getValidMoves();
     }
 }
