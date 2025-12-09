@@ -14,7 +14,8 @@ import uk.wwws.checkers.eventframework.aspects.errors.EventHandlerWrongDeclarati
 public class EventHandlerContainerAspect {
     @After("execution((@uk.wwws.checkers.eventframework.annotations.EventHandlerContainer *).new(..))")
     public void onCreate(JoinPoint joinPoint) {
-        for (Method declaredMethod : joinPoint.getClass().getDeclaredMethods()) {
+
+        for (Method declaredMethod : joinPoint.getThis().getClass().getDeclaredMethods()) {
             if (!declaredMethod.isAnnotationPresent(EventHandler.class)) {
                 continue;
             }
@@ -25,14 +26,19 @@ public class EventHandlerContainerAspect {
             }
 
             Class<?> firstParameter = declaredMethod.getParameterTypes()[0];
-            if (!(firstParameter.componentType().equals(Event.class))) {
+            System.out.println(firstParameter);
+
+
+            // todo also check for all superclasses and if any of them are subclass of Event.class should also add.
+            if (!(firstParameter.getSuperclass() == Event.class)) {
                 throw new EventHandlerWrongDeclarationError(
                         "The event handler's first argument should extend Event");
             }
 
-            EventManager.getInstance()
-                    .addListener((firstParameter.componentType().asSubclass(Event.class)),
-                                 new Pair<>(joinPoint.getThis(), declaredMethod));
+            declaredMethod.setAccessible(true);
+
+            EventManager.getInstance().addListener((firstParameter.asSubclass(Event.class)),
+                                                   new Pair<>(joinPoint.getThis(), declaredMethod));
         }
     }
 }

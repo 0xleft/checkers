@@ -32,7 +32,7 @@ public class EventManager {
     }
 
     public <E extends Event> void dispatchEvent(E event) {
-        this.listeners.get(event.getClass()).forEach(listener -> {
+        this.listeners.getOrDefault(event.getClass(), new HashSet<>()).forEach(listener -> {
             try {
                 listener.getValue().invoke(listener.getKey(), event);
             } catch (IllegalAccessException | InvocationTargetException e) {
