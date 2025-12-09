@@ -1,16 +1,15 @@
 package checkers.game;
 
-import uk.wwws.checkers.app.game.Checker;
-import uk.wwws.checkers.app.game.CheckersGame;
-import uk.wwws.checkers.app.game.Player;
+import uk.wwws.checkers.game.Checker;
+import uk.wwws.checkers.game.CheckersGame;
+import uk.wwws.checkers.game.Player;
 import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.wwws.checkers.app.game.exceptions.InvalidMoveException;
-import uk.wwws.checkers.app.game.moves.CheckersMove;
-import uk.wwws.checkers.app.game.moves.CheckersMoveGenerator;
-import uk.wwws.checkers.app.game.moves.Move;
-import uk.wwws.checkers.app.game.players.HumanPlayer;
+import uk.wwws.checkers.game.exceptions.InvalidMoveException;
+import uk.wwws.checkers.game.moves.CheckersMove;
+import uk.wwws.checkers.game.moves.Move;
+import uk.wwws.checkers.game.players.HumanPlayer;
 
 import static org.junit.jupiter.api.Assertions.*;
 

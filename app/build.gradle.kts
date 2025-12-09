@@ -1,6 +1,7 @@
 plugins {
     java
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("io.freefair.aspectj.post-compile-weaving") version "8.6"
 }
 
 group = "uk.wwws.checkers.app"
@@ -24,21 +25,21 @@ tasks.withType<JavaCompile> {
 
 tasks.register<JavaExec>("runClient") {
     group = "application"
-    mainClass.set("uk.wwws.checkers.app.apps.entrypoints.launchers.ClientLauncher")
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.ClientLauncher")
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 }
 
 tasks.register<JavaExec>("runServer") {
     group = "application"
-    mainClass.set("uk.wwws.checkers.app.apps.entrypoints.ServerApp")
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.ServerApp")
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 }
 
 tasks.register<JavaExec>("runAI") {
     group = "application"
-    mainClass.set("uk.wwws.checkers.app.apps.entrypoints.launchers.AILauncher")
+    mainClass.set("uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 }
@@ -47,7 +48,8 @@ tasks.register<Jar>("jarClient") {
     group = "build"
     archiveBaseName.set("client")
     manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.app.apps.entrypoints.launchers.ClientLauncher")
+        attributes("Main-Class" to "uk.wwws.checkers." +
+                "apps.entrypoints.launchers.ClientLauncher")
     }
     from(
         sourceSets["main"].runtimeClasspath,
@@ -59,7 +61,7 @@ tasks.register<Jar>("jarAI") {
     group = "build"
     archiveBaseName.set("ai")
     manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.app.apps.entrypoints.launchers.AILauncher")
+        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.launchers.AILauncher")
     }
     from(
         sourceSets["main"].runtimeClasspath,
@@ -71,7 +73,7 @@ tasks.register<Jar>("jarServer") {
     group = "build"
     archiveBaseName.set("server")
     manifest {
-        attributes("Main-Class" to "uk.wwws.checkers.app.apps.entrypoints.ServerApp")
+        attributes("Main-Class" to "uk.wwws.checkers.apps.entrypoints.ServerApp")
     }
     from(
         sourceSets["main"].runtimeClasspath,
@@ -94,15 +96,14 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.22.0")
     implementation("org.apache.logging.log4j:log4j-core:2.22.0")
 
-    implementation(project(":eventframework"))
-    annotationProcessor(project(":eventframework"))
-
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:win")
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:linux")
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:mac")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("org.aspectj:aspectjrt:1.9.25")
 }
 
 tasks.test {

@@ -1,7 +1,7 @@
 package checkers.game;
 
-import uk.wwws.checkers.app.game.Board;
-import uk.wwws.checkers.app.game.Checker;
+import uk.wwws.checkers.game.Board;
+import uk.wwws.checkers.game.Checker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
