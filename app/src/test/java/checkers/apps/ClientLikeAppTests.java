@@ -1,4 +1,4 @@
-package uk.wwws.checkers.apps;
+package checkers.apps;
 
 public class ClientLikeAppTests {
 }

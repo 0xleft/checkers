@@ -1,8 +1,10 @@
-package uk.wwws.checkers.game;
+package checkers.game;
 
+import uk.wwws.checkers.app.game.Board;
+import uk.wwws.checkers.app.game.Checker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.wwws.checkers.game.bitboards.Bitboard;
+import uk.wwws.checkers.app.game.bitboards.Bitboard;
 
 import static org.junit.jupiter.api.Assertions.*;
 

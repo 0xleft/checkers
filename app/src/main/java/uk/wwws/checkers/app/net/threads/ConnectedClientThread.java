@@ -1,11 +1,11 @@
-package checkers.net.threads;
+package uk.wwws.checkers.app.net.threads;
 
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import checkers.ErrorType;
-import checkers.game.players.ConnectedPlayer;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.game.players.ConnectedPlayer;
 
 public class ConnectedClientThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();

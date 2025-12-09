@@ -1,9 +1,9 @@
-package checkers.net.threads;
+package uk.wwws.checkers.app.net.threads;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.ErrorType;
-import checkers.net.Connection;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.net.Connection;
 
 public interface ConnectionDataHandler {
 

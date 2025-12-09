@@ -1,27 +1,27 @@
-package checkers.apps;
+package uk.wwws.checkers.app.apps;
 
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.ErrorType;
-import checkers.apps.exceptions.ServerErrorException;
-import checkers.game.Checker;
-import checkers.game.CheckersGame;
-import checkers.game.Game;
-import checkers.game.Player;
-import checkers.game.moves.CheckersMove;
-import checkers.game.moves.Move;
-import checkers.net.Connection;
-import checkers.net.ConnectionSender;
-import checkers.net.PacketAction;
-import checkers.net.exceptions.FailedToConnectException;
-import checkers.net.threads.ConnectionDataHandler;
-import checkers.net.threads.ServerConnectionThread;
-import checkers.ui.CommandAction;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.apps.exceptions.ServerErrorException;
+import uk.wwws.checkers.app.game.Checker;
+import uk.wwws.checkers.app.game.CheckersGame;
+import uk.wwws.checkers.app.game.Game;
+import uk.wwws.checkers.app.game.Player;
+import uk.wwws.checkers.app.game.moves.CheckersMove;
+import uk.wwws.checkers.app.game.moves.Move;
+import uk.wwws.checkers.app.net.Connection;
+import uk.wwws.checkers.app.net.ConnectionSender;
+import uk.wwws.checkers.app.net.PacketAction;
+import uk.wwws.checkers.app.net.exceptions.FailedToConnectException;
+import uk.wwws.checkers.app.net.threads.ConnectionDataHandler;
+import uk.wwws.checkers.app.net.threads.ServerConnectionThread;
+import uk.wwws.checkers.app.ui.CommandAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import checkers.ui.UI;
-import checkers.ui.UIAction;
+import uk.wwws.checkers.app.ui.UI;
+import uk.wwws.checkers.app.ui.UIAction;
 
 public abstract class ClientLikeApp
         implements App, ConnectionSender, ConnectionDataHandler {

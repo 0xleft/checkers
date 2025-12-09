@@ -1,13 +1,13 @@
-package checkers.game.moves;
+package uk.wwws.checkers.app.game.moves;
 
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
-import checkers.game.Board;
-import checkers.game.Checker;
-import checkers.game.bitboards.Bitboard;
-import checkers.game.bitboards.CaptureBitboard;
-import checkers.game.bitboards.MoveBitboard;
-import checkers.game.bitboards.PositionedBitboard;
+import uk.wwws.checkers.app.game.Board;
+import uk.wwws.checkers.app.game.Checker;
+import uk.wwws.checkers.app.game.bitboards.Bitboard;
+import uk.wwws.checkers.app.game.bitboards.CaptureBitboard;
+import uk.wwws.checkers.app.game.bitboards.MoveBitboard;
+import uk.wwws.checkers.app.game.bitboards.PositionedBitboard;
 
 /*
 I am aware that bitboards are way more effective but this is a quick and dirty prototype implemetation.

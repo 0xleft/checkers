@@ -1,12 +1,12 @@
-package checkers.apps;
+package uk.wwws.checkers.app.apps;
 
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.ErrorType;
-import checkers.game.Game;
-import checkers.ui.CommandAction;
-import checkers.ui.DataParser;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.game.Game;
+import uk.wwws.checkers.app.ui.CommandAction;
+import uk.wwws.checkers.app.ui.DataParser;
 
 public interface App extends DataParser {
     void run();

@@ -1,4 +1,4 @@
-package checkers.game.bitboards;
+package uk.wwws.checkers.app.game.bitboards;
 
 import org.jetbrains.annotations.NotNull;
 

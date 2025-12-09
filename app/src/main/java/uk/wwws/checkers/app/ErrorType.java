@@ -1,4 +1,4 @@
-package checkers;
+package uk.wwws.checkers.app;
 
 public enum ErrorType {
     NONE, ERROR, FATAL;

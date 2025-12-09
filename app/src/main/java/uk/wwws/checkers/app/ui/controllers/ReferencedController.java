@@ -1,6 +1,6 @@
-package checkers.ui.controllers;
+package uk.wwws.checkers.app.ui.controllers;
 
-import checkers.ui.GUI;
+import uk.wwws.checkers.app.ui.GUI;
 
 public class ReferencedController {
     protected GUI gui;

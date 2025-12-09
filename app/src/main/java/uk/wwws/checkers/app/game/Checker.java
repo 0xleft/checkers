@@ -1,4 +1,4 @@
-package checkers.game;
+package uk.wwws.checkers.app.game;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

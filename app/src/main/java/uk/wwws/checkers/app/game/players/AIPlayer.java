@@ -1,9 +1,9 @@
-package checkers.game.players;
+package uk.wwws.checkers.app.game.players;
 
 import org.jetbrains.annotations.NotNull;
-import checkers.game.CheckersGame;
-import checkers.game.Player;
-import checkers.game.moves.Move;
+import uk.wwws.checkers.app.game.CheckersGame;
+import uk.wwws.checkers.app.game.Player;
+import uk.wwws.checkers.app.game.moves.Move;
 
 public abstract class AIPlayer implements Player {
     public abstract Move getBestMove(@NotNull CheckersGame game);

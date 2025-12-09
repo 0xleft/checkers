@@ -1,10 +1,10 @@
-package checkers.net;
+package uk.wwws.checkers.app.net;
 
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.net.exceptions.FailedToConnectException;
-import checkers.net.exceptions.FailedToCreateStreamsException;
+import uk.wwws.checkers.app.net.exceptions.FailedToConnectException;
+import uk.wwws.checkers.app.net.exceptions.FailedToCreateStreamsException;
 
 public interface ConnectionSender {
     default @Nullable Connection connect(@NotNull String host, int port) {

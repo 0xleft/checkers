@@ -1,4 +1,4 @@
-package checkers.game.bitboards;
+package uk.wwws.checkers.app.game.bitboards;
 
 import java.util.Arrays;
 import java.util.BitSet;
@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.game.Checker;
+import uk.wwws.checkers.app.game.Checker;
 
 public class Bitboard extends BitSet {
     protected final int boardDim;

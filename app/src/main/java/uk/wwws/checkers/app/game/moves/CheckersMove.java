@@ -1,4 +1,4 @@
-package checkers.game.moves;
+package uk.wwws.checkers.app.game.moves;
 
 import java.text.MessageFormat;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package checkers.ui.controllers;
+package uk.wwws.checkers.app.ui.controllers;
 
 import java.util.Scanner;
 import javafx.fxml.FXML;
@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import checkers.ErrorType;
-import checkers.ui.CommandAction;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.ui.CommandAction;
 
 public class LobbyController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();

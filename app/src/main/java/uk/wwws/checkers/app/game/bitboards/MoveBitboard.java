@@ -1,6 +1,6 @@
-package checkers.game.bitboards;
+package uk.wwws.checkers.app.game.bitboards;
 
-import checkers.game.Board;
+import uk.wwws.checkers.app.game.Board;
 
 public class MoveBitboard extends PositionedBitboard {
 

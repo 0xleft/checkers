@@ -1,6 +1,6 @@
-package checkers.apps.entrypoints.launchers;
+package uk.wwws.checkers.app.apps.entrypoints.launchers;
 
-import checkers.apps.entrypoints.AIApp;
+import uk.wwws.checkers.app.apps.entrypoints.AIApp;
 
 public class AILauncher {
     public static void main(String[] args) {

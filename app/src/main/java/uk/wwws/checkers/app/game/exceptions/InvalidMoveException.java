@@ -1,4 +1,4 @@
-package checkers.game.exceptions;
+package uk.wwws.checkers.app.game.exceptions;
 
 public class InvalidMoveException extends RuntimeException {
     public InvalidMoveException(String message) {

@@ -1,4 +1,4 @@
-package checkers.ui.scenes;
+package uk.wwws.checkers.app.ui.scenes;
 
 import java.util.Scanner;
 import javafx.geometry.HPos;
@@ -15,13 +15,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.game.Board;
-import checkers.game.Checker;
-import checkers.game.bitboards.Bitboard;
-import checkers.ui.CommandAction;
-import checkers.ui.GUI;
-import checkers.ui.UIAction;
-import checkers.ui.controllers.GameController;
+import uk.wwws.checkers.app.game.Board;
+import uk.wwws.checkers.app.game.Checker;
+import uk.wwws.checkers.app.game.bitboards.Bitboard;
+import uk.wwws.checkers.app.ui.CommandAction;
+import uk.wwws.checkers.app.ui.GUI;
+import uk.wwws.checkers.app.ui.UIAction;
+import uk.wwws.checkers.app.ui.controllers.GameController;
 
 public class GameScene extends StaticScene {
     private static final Logger logger = LogManager.getRootLogger();

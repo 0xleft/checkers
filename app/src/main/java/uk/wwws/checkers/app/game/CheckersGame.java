@@ -1,14 +1,14 @@
-package checkers.game;
+package uk.wwws.checkers.app.game;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.game.exceptions.InvalidMoveException;
-import checkers.game.moves.CheckersMove;
-import checkers.game.moves.CheckersMoveGenerator;
-import checkers.game.moves.Move;
+import uk.wwws.checkers.app.game.exceptions.InvalidMoveException;
+import uk.wwws.checkers.app.game.moves.CheckersMove;
+import uk.wwws.checkers.app.game.moves.CheckersMoveGenerator;
+import uk.wwws.checkers.app.game.moves.Move;
 
 public class CheckersGame implements Game {
     private final Board board;

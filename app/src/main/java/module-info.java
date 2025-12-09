@@ -5,6 +5,7 @@ module uk.wwws.checkers.app {
     requires javafx.controls;
     requires org.jetbrains.annotations;
     requires jdk.jshell;
+    requires checkers.eventframework.main;
 
     opens uk.wwws.checkers.app;
     exports uk.wwws.checkers.app;

@@ -1,15 +1,13 @@
-package checkers.apps.entrypoints;
+package uk.wwws.checkers.app.apps.entrypoints;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import checkers.ai.DummyAIPlayer;
-import checkers.apps.ClientLikeApp;
-import checkers.game.moves.CheckersMove;
-import checkers.net.ConnectionSender;
-import checkers.net.threads.ConnectionDataHandler;
-import checkers.ui.TUI;
+import uk.wwws.checkers.app.ai.DummyAIPlayer;
+import uk.wwws.checkers.app.apps.ClientLikeApp;
+import uk.wwws.checkers.app.game.moves.CheckersMove;
+import uk.wwws.checkers.app.net.ConnectionSender;
+import uk.wwws.checkers.app.net.threads.ConnectionDataHandler;
+import uk.wwws.checkers.app.ui.TUI;
 
 public class AIApp extends ClientLikeApp implements ConnectionSender, ConnectionDataHandler {
     private static final Logger logger = LogManager.getRootLogger();

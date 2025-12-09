@@ -1,4 +1,4 @@
-package uk.wwws.checkers.ui.scenes;
+package checkers.ui.scenes;
 
 public class GameSceneTests {
 }

@@ -1,10 +1,10 @@
-package checkers.ui;
+package uk.wwws.checkers.app.ui;
 
 import java.util.Scanner;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.apps.App;
+import uk.wwws.checkers.app.apps.App;
 
 public interface UI {
     default void handleAction(@NotNull UIAction action, @Nullable Scanner data,

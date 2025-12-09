@@ -1,6 +1,6 @@
-package checkers.game.players;
+package uk.wwws.checkers.app.game.players;
 
-import checkers.game.Player;
+import uk.wwws.checkers.app.game.Player;
 
 public class HumanPlayer implements Player {
 }

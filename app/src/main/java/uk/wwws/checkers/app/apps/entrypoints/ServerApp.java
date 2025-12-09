@@ -1,7 +1,7 @@
-package checkers.apps.entrypoints;
+package uk.wwws.checkers.app.apps.entrypoints;
 
-import checkers.apps.ServerLikeApp;
-import checkers.ui.TUI;
+import uk.wwws.checkers.app.apps.ServerLikeApp;
+import uk.wwws.checkers.app.ui.TUI;
 
 public class ServerApp extends ServerLikeApp {
 

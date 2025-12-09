@@ -1,7 +1,7 @@
-package checkers.net;
+package uk.wwws.checkers.app.net;
 
 import org.jetbrains.annotations.NotNull;
-import checkers.ErrorType;
+import uk.wwws.checkers.app.ErrorType;
 
 public interface ConnectionReceiver {
     Thread spawnServer(int port);

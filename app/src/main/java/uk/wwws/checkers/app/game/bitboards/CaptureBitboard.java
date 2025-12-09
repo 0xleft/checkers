@@ -1,4 +1,4 @@
-package checkers.game.bitboards;
+package uk.wwws.checkers.app.game.bitboards;
 
 public class CaptureBitboard extends PositionedBitboard implements Directional {
     public CaptureBitboard(int boardDim, int captureRange) {

@@ -1,4 +1,4 @@
-package checkers.net;
+package uk.wwws.checkers.app.net;
 
 public enum PacketAction {
     QUEUE, ERROR, MOVE, BYE, ASSIGN_COLOR, YOUR_MOVE, GAME_WON, GAME_LOST, LEFT_QUEUE, JOINED_QUEUE, GIVE_UP

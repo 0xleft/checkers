@@ -1,10 +1,10 @@
-package checkers.ui.scenes;
+package uk.wwws.checkers.app.ui.scenes;
 
 import java.lang.reflect.InvocationTargetException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import checkers.ui.GUI;
+import uk.wwws.checkers.app.ui.GUI;
 
 public class SceneManager {
     private static final Logger logger = LogManager.getRootLogger();

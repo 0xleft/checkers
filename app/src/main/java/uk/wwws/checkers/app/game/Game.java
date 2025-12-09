@@ -1,9 +1,8 @@
-package checkers.game;
+package uk.wwws.checkers.app.game;
 
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import checkers.game.moves.Move;
+import uk.wwws.checkers.app.game.moves.Move;
 
 public interface Game {
     boolean isGameOver();

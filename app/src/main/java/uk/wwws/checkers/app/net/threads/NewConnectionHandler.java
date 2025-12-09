@@ -1,4 +1,4 @@
-package checkers.net.threads;
+package uk.wwws.checkers.app.net.threads;
 
 import java.net.Socket;
 import org.jetbrains.annotations.NotNull;

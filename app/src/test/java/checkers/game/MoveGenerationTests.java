@@ -1,4 +1,4 @@
-package uk.wwws.checkers.game;
+package checkers.game;
 
 import org.junit.jupiter.api.BeforeEach;
 

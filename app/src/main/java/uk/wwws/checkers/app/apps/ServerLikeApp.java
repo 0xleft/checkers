@@ -1,4 +1,4 @@
-package checkers.apps;
+package uk.wwws.checkers.app.apps;
 
 import java.net.Socket;
 import java.text.MessageFormat;
@@ -7,23 +7,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.ErrorType;
-import checkers.game.Checker;
-import checkers.game.CheckersGame;
-import checkers.game.Game;
-import checkers.game.Player;
-import checkers.game.exceptions.InvalidMoveException;
-import checkers.game.moves.CheckersMove;
-import checkers.game.players.ConnectedPlayer;
-import checkers.net.Connection;
-import checkers.net.ConnectionReceiver;
-import checkers.net.PacketAction;
-import checkers.net.threads.ConnectedClientThread;
-import checkers.net.threads.ConnectionDataHandler;
-import checkers.net.threads.NewConnectionHandler;
-import checkers.net.threads.ServerThread;
-import checkers.ui.CommandAction;
-import checkers.ui.UI;
+import uk.wwws.checkers.app.ErrorType;
+import uk.wwws.checkers.app.game.Checker;
+import uk.wwws.checkers.app.game.CheckersGame;
+import uk.wwws.checkers.app.game.Game;
+import uk.wwws.checkers.app.game.Player;
+import uk.wwws.checkers.app.game.exceptions.InvalidMoveException;
+import uk.wwws.checkers.app.game.moves.CheckersMove;
+import uk.wwws.checkers.app.game.players.ConnectedPlayer;
+import uk.wwws.checkers.app.net.Connection;
+import uk.wwws.checkers.app.net.ConnectionReceiver;
+import uk.wwws.checkers.app.net.PacketAction;
+import uk.wwws.checkers.app.net.threads.ConnectedClientThread;
+import uk.wwws.checkers.app.net.threads.ConnectionDataHandler;
+import uk.wwws.checkers.app.net.threads.NewConnectionHandler;
+import uk.wwws.checkers.app.net.threads.ServerThread;
+import uk.wwws.checkers.app.ui.CommandAction;
+import uk.wwws.checkers.app.ui.UI;
 
 public abstract class ServerLikeApp
         implements App, ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {

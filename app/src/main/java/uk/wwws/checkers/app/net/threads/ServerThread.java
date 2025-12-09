@@ -1,10 +1,10 @@
-package checkers.net.threads;
+package uk.wwws.checkers.app.net.threads;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import checkers.net.exceptions.FailedToConnectException;
+import uk.wwws.checkers.app.net.exceptions.FailedToConnectException;
 
 public class ServerThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();

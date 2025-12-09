@@ -1,12 +1,12 @@
-package checkers.ui.scenes;
+package uk.wwws.checkers.app.ui.scenes;
 
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.ui.GUI;
-import checkers.ui.UIAction;
+import uk.wwws.checkers.app.ui.GUI;
+import uk.wwws.checkers.app.ui.UIAction;
 
 public class LobbyScene extends StaticScene {
     private static final Logger logger = LogManager.getRootLogger();

@@ -1,8 +1,12 @@
-package uk.wwws.checkers.game;
+package checkers.game;
 
+import uk.wwws.checkers.app.game.Board;
+import uk.wwws.checkers.app.game.Checker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTests {
     private Board board;

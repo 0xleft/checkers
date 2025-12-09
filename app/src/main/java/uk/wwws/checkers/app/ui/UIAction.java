@@ -1,4 +1,4 @@
-package checkers.ui;
+package uk.wwws.checkers.app.ui;
 
 public enum UIAction {
     BOARD_SYNC,

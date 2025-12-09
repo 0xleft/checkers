@@ -1,9 +1,9 @@
-package checkers.ui;
+package uk.wwws.checkers.app.ui;
 
 import java.util.Scanner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.net.PacketAction;
+import uk.wwws.checkers.app.net.PacketAction;
 
 public interface DataParser {
     default @Nullable String getNext(@NotNull Scanner data) {

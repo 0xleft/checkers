@@ -1,8 +1,8 @@
-package checkers.apps.entrypoints;
+package uk.wwws.checkers.app.apps.entrypoints;
 
-import checkers.apps.ClientLikeApp;
-import checkers.game.players.HumanPlayer;
-import checkers.ui.GUI;
+import uk.wwws.checkers.app.apps.ClientLikeApp;
+import uk.wwws.checkers.app.game.players.HumanPlayer;
+import uk.wwws.checkers.app.ui.GUI;
 
 public class ClientApp extends ClientLikeApp {
     private static ClientApp instance;

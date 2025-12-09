@@ -1,4 +1,4 @@
-package checkers.ui.controllers;
+package uk.wwws.checkers.app.ui.controllers;
 
 import java.util.Scanner;
 import javafx.fxml.FXML;
@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import checkers.ui.CommandAction;
+import uk.wwws.checkers.app.ui.CommandAction;
 
 public class GameController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();

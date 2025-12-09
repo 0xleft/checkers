@@ -1,4 +1,4 @@
-package uk.wwws.checkers.net;
+package checkers.net;
 
 import org.junit.jupiter.api.BeforeEach;
 

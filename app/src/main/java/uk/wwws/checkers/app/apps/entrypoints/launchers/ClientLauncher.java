@@ -1,8 +1,6 @@
-package checkers.apps.entrypoints.launchers;
+package uk.wwws.checkers.app.apps.entrypoints.launchers;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-import checkers.apps.entrypoints.ClientApp;
+import uk.wwws.checkers.app.apps.entrypoints.ClientApp;
 
 public class ClientLauncher {
     public static void main(String[] args) {

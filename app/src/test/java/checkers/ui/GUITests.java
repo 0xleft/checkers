@@ -1,4 +1,4 @@
-package uk.wwws.checkers.ui;
+package checkers.ui;
 
 public class GUITests {
 }

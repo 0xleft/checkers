@@ -1,11 +1,11 @@
-package checkers.ai;
+package uk.wwws.checkers.app.ai;
 
 import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import checkers.game.CheckersGame;
-import checkers.game.moves.Move;
-import checkers.game.players.AIPlayer;
+import uk.wwws.checkers.app.game.CheckersGame;
+import uk.wwws.checkers.app.game.moves.Move;
+import uk.wwws.checkers.app.game.players.AIPlayer;
 
 public class DummyAIPlayer extends AIPlayer {
 

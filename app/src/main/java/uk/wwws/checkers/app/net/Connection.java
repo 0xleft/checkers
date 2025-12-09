@@ -1,4 +1,4 @@
-package checkers.net;
+package uk.wwws.checkers.app.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import checkers.net.exceptions.FailedToConnectException;
-import checkers.net.exceptions.FailedToCreateStreamsException;
+import uk.wwws.checkers.app.net.exceptions.FailedToConnectException;
+import uk.wwws.checkers.app.net.exceptions.FailedToCreateStreamsException;
 
 public class Connection {
     private static final Logger logger = LogManager.getRootLogger();

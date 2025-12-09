@@ -1,4 +1,4 @@
-package uk.wwws.checkers.ai;
+package checkers.ai;
 
 public class AITests {
 }
