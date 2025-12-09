@@ -1,4 +1,7 @@
 package uk.wwws.checkers.eventframework;
 
-public interface Event {
+public abstract class Event {
+    public void invoke() {
+        EventManager.getInstance().dispatchEvent(this);
+    }
 }
