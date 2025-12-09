@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.apps.exceptions.ServerErrorException;
+import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.CheckersGame;
 import uk.wwws.checkers.game.Game;
@@ -23,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.ui.UI;
 import uk.wwws.checkers.ui.UIAction;
 
+@EventHandlerContainer
 public abstract class ClientLikeApp
         implements App, ConnectionSender, ConnectionDataHandler {
     private static final Logger logger = LogManager.getRootLogger();

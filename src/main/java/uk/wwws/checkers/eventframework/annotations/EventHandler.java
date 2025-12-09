@@ -9,4 +9,5 @@ import uk.wwws.checkers.eventframework.Event;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface EventHandler {
+    Priority priority() default Priority.NORMAL;
 }
