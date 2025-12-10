@@ -122,7 +122,8 @@ public class Bitboard extends BitSet {
         return bitboard;
     }
 
-    public static @NotNull Bitboard diagonalRay(int range, int row, int col, boolean down, int boardDim) {
+    public static @NotNull Bitboard diagonalRay(int range, int row, int col, boolean down,
+                                                int boardDim) {
         Bitboard bitboard = new Bitboard(boardDim);
 
         // todo simplify since cyclomatic complexity

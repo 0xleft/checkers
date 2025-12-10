@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.events.net.NewConnectionEvent;
 import uk.wwws.checkers.net.Connection;
-import uk.wwws.checkers.net.exceptions.FailedToConnectException;
 import uk.wwws.checkers.net.exceptions.FailedToCreateStreamsException;
 
 public class ServerThread extends Thread {

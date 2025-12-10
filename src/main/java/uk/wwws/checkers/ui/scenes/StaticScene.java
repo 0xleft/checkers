@@ -31,7 +31,7 @@ public class StaticScene {
             return;
         }
 
-        ((ReferencedController)(gui.getLoader().getController())).setGui(gui);
+        ((ReferencedController) gui.getLoader().getController()).setGui(gui);
 
         if (gui.getCurrentStage() == null) {
             logger.error("Current scene is null while loading url: {}", sceneFileURL);

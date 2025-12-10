@@ -10,8 +10,6 @@ import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 import uk.wwws.checkers.events.commands.QuitCommandEvent;
-import uk.wwws.checkers.events.commands.StopServerCommandEvent;
-import uk.wwws.checkers.utils.DataParser;
 
 @EventHandlerContainer
 public class TUI implements UI {

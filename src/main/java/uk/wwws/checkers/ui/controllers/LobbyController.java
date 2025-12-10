@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
-import uk.wwws.checkers.events.commands.ConnectCommandEvent;
 import uk.wwws.checkers.events.ui.FailedToConnectUIEvent;
 import uk.wwws.checkers.ui.CommandParser;
 
@@ -31,7 +30,8 @@ public class LobbyController extends ReferencedController {
         statusLabel.setText("Connecting...");
         statusLabel.setVisible(true);
 
-        CommandParser.getInstance().parseAction(String.format("CONNECT %s %s", hostnameField.getText(), portField.getText()));
+        CommandParser.getInstance().parseAction(
+                String.format("CONNECT %s %s", hostnameField.getText(), portField.getText()));
         joinButton.setDisable(false);
     }
 

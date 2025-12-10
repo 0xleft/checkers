@@ -1,8 +1,9 @@
 package uk.wwws.checkers.apps;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
@@ -20,8 +21,6 @@ import uk.wwws.checkers.net.Connection;
 import uk.wwws.checkers.net.PacketAction;
 import uk.wwws.checkers.net.exceptions.FailedToConnectException;
 import uk.wwws.checkers.net.threads.ServerConnectionThread;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.ui.UI;
 
 @EventHandlerContainer

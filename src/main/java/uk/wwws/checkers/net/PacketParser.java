@@ -1,7 +1,6 @@
 package uk.wwws.checkers.net;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

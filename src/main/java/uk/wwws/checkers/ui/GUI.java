@@ -1,6 +1,5 @@
 package uk.wwws.checkers.ui;
 
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -10,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.apps.App;
-import uk.wwws.checkers.events.commands.QuitCommandEvent;
 import uk.wwws.checkers.ui.scenes.LobbyScene;
 import uk.wwws.checkers.ui.scenes.SceneManager;
 

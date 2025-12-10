@@ -1,7 +1,9 @@
 package uk.wwws.checkers.apps;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +38,11 @@ public abstract class ServerLikeApp extends App {
 
     public ServerLikeApp() {
         this.helpText = """
-            START_SERVER <port> starts the server on a given port.
-            STOP_SERVER         stops the server.
-            STATE               prints the state of the server.
-            HELP                prints this menu
-            QUIT                closes the application""";
+                START_SERVER <port> starts the server on a given port.
+                STOP_SERVER         stops the server.
+                STATE               prints the state of the server.
+                HELP                prints this menu
+                QUIT                closes the application""";
     }
 
     @EventHandler

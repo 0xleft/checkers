@@ -7,9 +7,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uk.wwws.checkers.events.commands.DisconnectCommandEvent;
-import uk.wwws.checkers.events.commands.GiveUpCommandEvent;
-import uk.wwws.checkers.events.commands.QueueCommandEvent;
 import uk.wwws.checkers.ui.CommandParser;
 
 public class GameController extends ReferencedController {

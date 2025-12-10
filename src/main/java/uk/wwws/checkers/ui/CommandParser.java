@@ -1,17 +1,10 @@
 package uk.wwws.checkers.ui;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.events.commands.*;
-import uk.wwws.checkers.events.net.QueueConnectionEvent;
-import uk.wwws.checkers.net.PacketAction;
-import uk.wwws.checkers.net.PacketParser;
 import uk.wwws.checkers.utils.DataParser;
 
 public class CommandParser implements DataParser {

@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
-import uk.wwws.checkers.events.commands.MoveCommandEvent;
 import uk.wwws.checkers.events.net.*;
 import uk.wwws.checkers.events.ui.BoardSyncUIEvent;
 import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
@@ -146,18 +145,21 @@ public class GameScene extends StaticScene {
 
     private void addMoveHandler(@NotNull Node node, int row, int col) {
         node.setOnMouseClicked((MouseEvent _) -> {
-            int adjustedIndex = getAdjustedIndex(gui.getApp().getGameState().getBoard().index(row, col));
+            int adjustedIndex =
+                    getAdjustedIndex(gui.getApp().getGameState().getBoard().index(row, col));
 
-            if (gui.getApp().getGameState().getBoard().getField(adjustedIndex) !=
-                    Checker.EMPTY) {
+            if (gui.getApp().getGameState().getBoard().getField(adjustedIndex) != Checker.EMPTY) {
                 selectedId = adjustedIndex;
 
-                System.out.println(perspective + " " + selectedId + " " + gui.getApp().getGameState().getBoard().getField(adjustedIndex));
+                System.out.println(perspective + " " + selectedId + " " +
+                                           gui.getApp().getGameState().getBoard()
+                                                   .getField(adjustedIndex));
                 return;
             }
 
             if (selectedId != -1) {
-                CommandParser.getInstance().parseAction(String.format("MOVE %d %d", selectedId, adjustedIndex));
+                CommandParser.getInstance()
+                        .parseAction(String.format("MOVE %d %d", selectedId, adjustedIndex));
                 controller.stateLabel.setText("Waiting for opponent to move");
                 selectedId = -1;
             }

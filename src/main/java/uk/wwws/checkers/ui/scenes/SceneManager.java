@@ -12,7 +12,7 @@ public class SceneManager {
     private static SceneManager instance;
 
     public static SceneManager getInstance() {
-        if  (instance == null) {
+        if (instance == null) {
             instance = new SceneManager();
         }
         return instance;
@@ -26,8 +26,10 @@ public class SceneManager {
 
     public <T> void loadScene(Class<T> sceneClass, @NotNull GUI gui) {
         try {
-            currentScene = (StaticScene) sceneClass.getDeclaredConstructor(GUI.class).newInstance(gui);
-        } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+            currentScene =
+                    (StaticScene) sceneClass.getDeclaredConstructor(GUI.class).newInstance(gui);
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
+                 NoSuchMethodException e) {
             logger.error("Error while loading scene: {}, error: {}", sceneClass, e.getMessage());
             return;
         }

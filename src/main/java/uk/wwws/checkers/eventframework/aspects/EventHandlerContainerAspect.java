@@ -1,7 +1,5 @@
 package uk.wwws.checkers.eventframework.aspects;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import uk.wwws.checkers.eventframework.Event;
 import uk.wwws.checkers.eventframework.EventManager;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.aspects.errors.EventHandlerWrongDeclarationError;
 
 @Aspect
@@ -46,7 +43,7 @@ public class EventHandlerContainerAspect {
             }
 
             Class<?> firstParameter = declaredMethod.getParameterTypes()[0];
-            if (!(isSubclass(firstParameter, Event.class))) {
+            if (!isSubclass(firstParameter, Event.class)) {
                 throw new EventHandlerWrongDeclarationError(
                         "The event handler's first argument should extend Event");
             }
@@ -54,7 +51,7 @@ public class EventHandlerContainerAspect {
             declaredMethod.setAccessible(true);
 
 
-            EventManager.getInstance().addListener((firstParameter.asSubclass(Event.class)),
+            EventManager.getInstance().addListener(firstParameter.asSubclass(Event.class),
                                                    new Pair<>(mainThis, declaredMethod),
                                                    annotation.priority(),
                                                    annotation.ignoreCanceled(),
