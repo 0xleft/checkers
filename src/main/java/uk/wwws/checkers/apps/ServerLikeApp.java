@@ -199,6 +199,7 @@ public abstract class ServerLikeApp extends App {
 
         try {
             player.getGame().doMove(new CheckersMove(event.getFromSquare(), event.getToSquare()));
+            logger.debug("Played a move: {} {}", event.getFromSquare(), event.getToSquare());
         } catch (InvalidMoveException e) {
             logger.error("Player tried to play invalid move: {} to {}", event.getFromSquare(),
                          event.getToSquare());

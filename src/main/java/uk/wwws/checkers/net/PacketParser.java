@@ -80,7 +80,8 @@ public class PacketParser implements DataParser {
             return;
         }
 
-        new MoveConnectionEvent().setFromSquare(fromIndex).setToSquare(toIndex).emit();
+        new MoveConnectionEvent().setFromSquare(fromIndex).setToSquare(toIndex)
+                .setConnection(connection).emit();
     }
 
     private void handleYourMove(@NotNull Connection connection, @NotNull Scanner input) {
@@ -112,6 +113,6 @@ public class PacketParser implements DataParser {
 
         Checker color = Checker.valueOf(colorString.toUpperCase());
 
-        new AssignColorConnectionEvent().setColor(color).emit();
+        new AssignColorConnectionEvent().setColor(color).setConnection(connection).emit();
     }
 }

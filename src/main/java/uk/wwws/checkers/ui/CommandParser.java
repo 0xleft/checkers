@@ -40,8 +40,8 @@ public class CommandParser implements DataParser {
                 case GIVE_UP -> handleGiveUp(input);
                 case HELP -> handleHelpMenu(input);
                 case START_SERVER -> handleStartServer(input);
-                case QUIT -> handleQuit(input);
                 case STOP_SERVER -> handleStopServer(input);
+                case QUIT -> handleQuit(input);
                 default -> logger.error(
                         "Invalid command or wrong argument usage. Type help to get command list");
             }
@@ -63,7 +63,14 @@ public class CommandParser implements DataParser {
     }
 
     private void handleStartServer(@NotNull Scanner input) {
-        new StartServerCommandEvent().emit();
+        Integer port = getNextInt(input);
+
+        if (port == null) {
+            logger.error("That was not a valid port. Usage: start_server <port:int>");
+            return;
+        }
+
+        new StartServerCommandEvent().setPort(port).emit();
     }
 
     private void handleHelpMenu(@NotNull Scanner input) {
@@ -82,6 +89,7 @@ public class CommandParser implements DataParser {
             logger.error("Invalid move: {} to {}", fromIndex, toIndex);
             return;
         }
+
         new MoveCommandEvent().setFromSquare(fromIndex).setToSquare(toIndex).emit();
     }
 

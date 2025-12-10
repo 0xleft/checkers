@@ -22,6 +22,7 @@ import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.game.Board;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.bitboards.Bitboard;
+import uk.wwws.checkers.ui.CommandParser;
 import uk.wwws.checkers.ui.GUI;
 import uk.wwws.checkers.ui.controllers.GameController;
 
@@ -156,7 +157,7 @@ public class GameScene extends StaticScene {
             }
 
             if (selectedId != -1) {
-                new MoveCommandEvent().setFromSquare(selectedId).setToSquare(adjustedIndex).emit();
+                CommandParser.getInstance().parseAction(String.format("MOVE %d %d", selectedId, adjustedIndex));
                 controller.stateLabel.setText("Waiting for opponent to move");
                 selectedId = -1;
             }

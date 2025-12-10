@@ -22,7 +22,6 @@ public class Connection {
     private BufferedReader in;
     private final UUID id = UUID.randomUUID();
 
-    // for client to connect to said socket
     public Connection(@NotNull Socket socket) throws FailedToCreateStreamsException {
         this.host = socket.getInetAddress().getHostName();
         this.port = socket.getPort();
@@ -35,7 +34,6 @@ public class Connection {
         }
     }
 
-    // for client to connect to said socket
     public Connection(@NotNull String host, int port) throws FailedToConnectException {
         this.host = host;
         this.port = port;
@@ -67,9 +65,8 @@ public class Connection {
         return this;
     }
 
-    public @NotNull Connection write(@NotNull PacketAction action) {
+    public void write(@NotNull PacketAction action) {
         write(action.toString()).write("\n");
-        return this;
     }
 
     public @NotNull Connection write(@NotNull PacketAction action, @NotNull String data) {

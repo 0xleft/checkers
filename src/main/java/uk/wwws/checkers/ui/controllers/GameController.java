@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.events.commands.DisconnectCommandEvent;
 import uk.wwws.checkers.events.commands.GiveUpCommandEvent;
 import uk.wwws.checkers.events.commands.QueueCommandEvent;
+import uk.wwws.checkers.ui.CommandParser;
 
 public class GameController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();
@@ -29,16 +30,16 @@ public class GameController extends ReferencedController {
 
     @FXML
     protected void onGiveUpButtonAction() {
-        new GiveUpCommandEvent().emit();
+        CommandParser.getInstance().parseAction("GIVE_UP");
     }
 
     @FXML
     protected void onJoinQueueButtonAction() {
-        new QueueCommandEvent().emit();
+        CommandParser.getInstance().parseAction("QUEUE");
     }
 
     @FXML
     protected void onDisconnectButtonAction() {
-        new DisconnectCommandEvent().emit();
+        CommandParser.getInstance().parseAction("DISCONNECT");
     }
 }

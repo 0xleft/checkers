@@ -10,6 +10,7 @@ import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.commands.ConnectCommandEvent;
 import uk.wwws.checkers.events.ui.FailedToConnectUIEvent;
+import uk.wwws.checkers.ui.CommandParser;
 
 @EventHandlerContainer
 public class LobbyController extends ReferencedController {
@@ -30,7 +31,7 @@ public class LobbyController extends ReferencedController {
         statusLabel.setText("Connecting...");
         statusLabel.setVisible(true);
 
-        new ConnectCommandEvent().setHost(hostnameField.getText()).setPort(portField.getText()).emit();
+        CommandParser.getInstance().parseAction(String.format("CONNECT %s %s", hostnameField.getText(), portField.getText()));
         joinButton.setDisable(false);
     }
 

@@ -2,6 +2,7 @@ package uk.wwws.checkers.net.threads;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.events.net.NewConnectionEvent;
@@ -13,7 +14,6 @@ public class ServerThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final int port;
-    private ServerSocket socket;
 
     public ServerThread(int port) {
         this.port = port;
@@ -22,8 +22,10 @@ public class ServerThread extends Thread {
     public void run() {
         super.run();
 
+        ServerSocket serverSocket = null;
+
         try {
-            socket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             logger.error("Failed to bind to port: {}", port);
             return;
@@ -31,7 +33,8 @@ public class ServerThread extends Thread {
 
         while (true) {
             try {
-                new NewConnectionEvent().setConnection(new Connection(socket.accept())).emit();
+                Socket clientSocket = serverSocket.accept();
+                new NewConnectionEvent().setConnection(new Connection(clientSocket)).emit();
             } catch (IOException | FailedToCreateStreamsException e) {
                 logger.error("Error in handling new connection: {}", e.getMessage());
             }

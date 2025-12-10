@@ -75,6 +75,7 @@ public class EventManager {
         } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error("Error dispatching event in: {} error: {}", event.getClass(),
                          e.getMessage());
+            e.printStackTrace();
         }
     }
 

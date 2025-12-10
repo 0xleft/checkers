@@ -28,10 +28,6 @@ public class EventHandlerContainerAspect {
     }
 
     private int addSuperclassMethods(Object mainThis, Class<?> superClass) {
-        if (!superClass.isAnnotationPresent(EventHandlerContainer.class)) {
-            return 0;
-        }
-
         int annotatedMethodCount = 0;
 
         for (Method declaredMethod : superClass.getDeclaredMethods()) {
@@ -65,6 +61,12 @@ public class EventHandlerContainerAspect {
                                                    annotation.isPlatform());
 
             annotatedMethodCount++;
+
+            logger.debug("Added new handler: {}", declaredMethod);
+        }
+
+        if (superClass.getSuperclass() == Object.class) {
+            return annotatedMethodCount;
         }
 
         return annotatedMethodCount + addSuperclassMethods(mainThis, superClass.getSuperclass());

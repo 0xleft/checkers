@@ -128,18 +128,18 @@ public abstract class ClientLikeApp extends App {
         logger.info(game);
     }
 
-    @EventHandler
+    @EventHandler(priority = Priority.HIGHEST)
     public void handleHelpMenu(HelpCommandEvent event) {
         logger.info(this.helpText);
     }
 
-    @EventHandler
+    @EventHandler(priority = Priority.HIGHEST)
     public void handleGiveUp(GiveUpCommandEvent event) {
         logger.debug("Sending a give up command to server");
         connectionThread.getConnection().write(PacketAction.GIVE_UP);
     }
 
-    @EventHandler
+    @EventHandler(priority = Priority.HIGHEST)
     public void handleQueue(QueueCommandEvent event) {
         if (connectionThread == null) {
             logger.error("You need to be connected to send moves");
@@ -149,8 +149,8 @@ public abstract class ClientLikeApp extends App {
         connectionThread.getConnection().write(PacketAction.QUEUE);
     }
 
-    @EventHandler
-    public void handleMove(MoveConnectionEvent event) {
+    @EventHandler(priority = Priority.HIGHEST)
+    public void handleMove(MoveCommandEvent event) {
         if (connectionThread == null) {
             logger.error("You need to be connected to send moves");
             return;
@@ -161,11 +161,6 @@ public abstract class ClientLikeApp extends App {
             return;
         }
 
-        if (game.getTurn() != this.player) {
-            logger.error("It's not your turn to move");
-            // return;
-        }
-
         sendMove(new CheckersMove(event.getFromSquare(), event.getToSquare()));
     }
 
@@ -174,14 +169,14 @@ public abstract class ClientLikeApp extends App {
                 .write(PacketAction.MOVE, move.startIndex() + " " + move.endIndex());
     }
 
-    @EventHandler
+    @EventHandler(priority = Priority.HIGHEST)
     public void handleConnect(ConnectCommandEvent event) {
         Connection connection;
 
         try {
             connection = new Connection(event.getHost(), Integer.parseInt(event.getPort()));
         } catch (FailedToConnectException | NumberFormatException e) {
-            logger.error("Invalid ussage. Use connect <host:string> <port:int> {}", e.getMessage());
+            logger.error("Invalid usage. Use connect <host:string> <port:int> {}", e.getMessage());
             return;
         }
 
