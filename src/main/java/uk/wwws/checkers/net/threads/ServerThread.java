@@ -21,7 +21,7 @@ public class ServerThread extends Thread {
     public void run() {
         super.run();
 
-        ServerSocket serverSocket = null;
+        ServerSocket serverSocket;
 
         try {
             serverSocket = new ServerSocket(port);

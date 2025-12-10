@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.net.exceptions.FailedToConnectException;
 import uk.wwws.checkers.net.exceptions.FailedToCreateStreamsException;
 
@@ -74,8 +75,12 @@ public class Connection {
         return this;
     }
 
-    public @NotNull String read() throws IOException {
-        return in.readLine();
+    public @Nullable String read() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void disconnect() throws IOException {

@@ -1,6 +1,7 @@
 package uk.wwws.checkers.apps;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -22,7 +23,7 @@ import uk.wwws.checkers.game.moves.CheckersMove;
 import uk.wwws.checkers.game.players.ConnectedPlayer;
 import uk.wwws.checkers.net.Connection;
 import uk.wwws.checkers.net.PacketAction;
-import uk.wwws.checkers.net.threads.ConnectedClientThread;
+import uk.wwws.checkers.net.threads.ConnectionThread;
 import uk.wwws.checkers.net.threads.ServerThread;
 import uk.wwws.checkers.ui.UI;
 
@@ -31,7 +32,7 @@ public abstract class ServerLikeApp extends App {
     private static final Logger logger = LogManager.getRootLogger();
 
     protected UI ui;
-    HashSet<ConnectedClientThread> connections = new HashSet<>();
+    HashMap<ConnectedPlayer, ConnectionThread> connections = new HashMap<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
     private @Nullable ServerThread serverThread;
 
@@ -79,16 +80,16 @@ public abstract class ServerLikeApp extends App {
     @EventHandler
     public void handleNewConnection(NewConnectionEvent event) {
         logger.info("New client connected");
-        ConnectedClientThread client =
-                new ConnectedClientThread(new ConnectedPlayer(event.getConnection()));
-        connections.add(client);
+        ConnectionThread client =
+                new ConnectionThread(event.getConnection());
+        connections.put(new ConnectedPlayer(event.getConnection()), client);
         client.start();
     }
 
-    private @Nullable ConnectedClientThread getConnectedPlayer(@NotNull Connection c) {
-        for (ConnectedClientThread connection : connections) {
-            if (connection.getPlayer().getConnection() == c) {
-                return connection;
+    private @Nullable ConnectedPlayer getConnectedPlayer(@NotNull Connection c) {
+        for (ConnectedPlayer player : connections.keySet()) {
+            if (player.getConnection() == c) {
+                return player;
             }
         }
 
@@ -107,7 +108,7 @@ public abstract class ServerLikeApp extends App {
             return;
         }
 
-        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection);
         if (player.getGame() == null) {
             return;
         }
@@ -123,7 +124,7 @@ public abstract class ServerLikeApp extends App {
             return;
         }
 
-        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection);
         if (queue.contains(player)) {
             player.getConnection().write(PacketAction.LEFT_QUEUE);
             queue.remove(player);
@@ -166,16 +167,15 @@ public abstract class ServerLikeApp extends App {
             return;
         }
 
-        ConnectedClientThread clientThread = getConnectedPlayer(connection);
-        ConnectedPlayer player = clientThread.getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection);
         if (player.getGame() != null) {
             player.getGame().setSetLoser(player);
             disconnectPlayers(player.getGame());
         }
 
-        clientThread.interrupt();
+        connections.get(player).interrupt();
         connection.write(PacketAction.BYE);
-        connections.remove(clientThread);
+        connections.remove(player);
         queue.remove(player);
         logger.info("Client disconnected");
     }
@@ -184,7 +184,7 @@ public abstract class ServerLikeApp extends App {
     private void handleMove(MoveConnectionEvent event) {
         Connection connection = event.getConnection();
 
-        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection);
         CheckersGame game = player.getGame();
         if (game == null) {
             connection.write(PacketAction.ERROR);
@@ -268,10 +268,11 @@ public abstract class ServerLikeApp extends App {
     private void reset() {
         this.serverThread = null;
         this.queue = new LinkedList<>();
-        connections.forEach(c -> {
-            c.getPlayer().getConnection().write(PacketAction.BYE);
-            c.interrupt();
-        });
-        this.connections = new HashSet<>();
+        for (ConnectedPlayer connectedPlayer : connections.keySet()) {
+            connectedPlayer.getConnection().write(PacketAction.BYE);
+            connections.get(connectedPlayer).interrupt();
+        }
+
+        this.connections = new HashMap<>();
     }
 }
