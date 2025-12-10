@@ -9,9 +9,7 @@ import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 import uk.wwws.checkers.events.commands.*;
 import uk.wwws.checkers.events.net.*;
-import uk.wwws.checkers.events.ui.BoardSyncUIEvent;
-import uk.wwws.checkers.events.ui.ConnectedUIEvent;
-import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
+import uk.wwws.checkers.events.ui.*;
 import uk.wwws.checkers.game.CheckersGame;
 import uk.wwws.checkers.game.Game;
 import uk.wwws.checkers.game.Player;
@@ -27,7 +25,6 @@ import uk.wwws.checkers.ui.UI;
 public abstract class ClientLikeApp extends App {
     private static final Logger logger = LogManager.getRootLogger();
 
-    public static final boolean IS_CLIENT = true;
     protected UI ui;
     protected ServerConnectionThread connectionThread;
     protected CheckersGame game;
@@ -152,11 +149,13 @@ public abstract class ClientLikeApp extends App {
     public void handleMove(MoveCommandEvent event) {
         if (connectionThread == null) {
             logger.error("You need to be connected to send moves");
+            new GameRequiredUIEvent().emit();
             return;
         }
 
         if (game == null) {
             logger.error("You need to be in game to send moves");
+            new NotYourMoveUIEvent().emit();
             return;
         }
 
@@ -176,6 +175,7 @@ public abstract class ClientLikeApp extends App {
             connection = new Connection(event.getHost(), Integer.parseInt(event.getPort()));
         } catch (FailedToConnectException | NumberFormatException e) {
             logger.error("Invalid usage. Use connect <host:string> <port:int> {}", e.getMessage());
+            new FailedToConnectUIEvent().emit();
             return;
         }
 

@@ -29,7 +29,6 @@ import uk.wwws.checkers.ui.UI;
 @EventHandlerContainer
 public abstract class ServerLikeApp extends App {
     private static final Logger logger = LogManager.getRootLogger();
-    public static final boolean IS_CLIENT = false;
 
     protected UI ui;
     HashSet<ConnectedClientThread> connections = new HashSet<>();

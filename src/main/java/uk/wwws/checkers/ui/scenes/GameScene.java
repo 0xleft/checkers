@@ -18,6 +18,8 @@ import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.net.*;
 import uk.wwws.checkers.events.ui.BoardSyncUIEvent;
 import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
+import uk.wwws.checkers.events.ui.GameRequiredUIEvent;
+import uk.wwws.checkers.events.ui.NotYourMoveUIEvent;
 import uk.wwws.checkers.game.Board;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.bitboards.Bitboard;
@@ -79,6 +81,16 @@ public class GameScene extends StaticScene {
     }
 
     @EventHandler(isPlatform = true)
+    public void handleNotYourMove(NotYourMoveUIEvent event) {
+        controller.stateLabel.setText("It's not your turn to move.");
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleGameRequired(GameRequiredUIEvent event) {
+        controller.stateLabel.setText("You are not in game, please queue.");
+    }
+
+    @EventHandler(isPlatform = true)
     public void handleAssignColor(AssignColorConnectionEvent event) {
         perspective = event.getColor();
         drawBoard();
@@ -90,7 +102,6 @@ public class GameScene extends StaticScene {
 
     private void drawBoard() {
         controller.gameBoard.getChildren().clear();
-
         for (int i = 0; i < controller.gameBoard.getRowCount(); i++) {
             for (int j = 0; j < controller.gameBoard.getColumnCount(); j++) {
                 Rectangle rect = new Rectangle(50, 50);
@@ -160,7 +171,6 @@ public class GameScene extends StaticScene {
             if (selectedId != -1) {
                 CommandParser.getInstance()
                         .parseAction(String.format("MOVE %d %d", selectedId, adjustedIndex));
-                controller.stateLabel.setText("Waiting for opponent to move");
                 selectedId = -1;
             }
         });
