@@ -25,9 +25,6 @@ public class TUI implements UI, DataParser {
         return app;
     }
 
-    @Override
-    public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {}
-
     public void run() {
         if (app == null) {
             logger.error("App is null");

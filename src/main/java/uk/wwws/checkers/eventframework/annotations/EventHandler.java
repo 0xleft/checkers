@@ -10,4 +10,5 @@ import uk.wwws.checkers.eventframework.Event;
 @Target({ElementType.METHOD})
 public @interface EventHandler {
     Priority priority() default Priority.NORMAL;
+    boolean ignoreCanceled() default false;
 }

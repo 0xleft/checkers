@@ -10,6 +10,5 @@ import uk.wwws.checkers.ui.DataParser;
 
 public interface App extends DataParser {
     void run();
-    @NotNull ErrorType handleAction(@Nullable CommandAction action, @NotNull Scanner data);
     @Nullable Game getGameState();
 }
