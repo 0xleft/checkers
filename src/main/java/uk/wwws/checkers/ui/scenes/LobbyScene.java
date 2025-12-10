@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.ui.ConnectedUIEvent;
+import uk.wwws.checkers.events.ui.FailedToConnectUIEvent;
 import uk.wwws.checkers.ui.GUI;
+import uk.wwws.checkers.ui.controllers.LobbyController;
 
 @EventHandlerContainer
 public class LobbyScene extends StaticScene {
@@ -19,6 +21,12 @@ public class LobbyScene extends StaticScene {
     @EventHandler(isPlatform = true)
     public void handleConnected(ConnectedUIEvent event) {
         SceneManager.getInstance().loadScene(GameScene.class, gui);
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleFailedToConnect(FailedToConnectUIEvent event) {
+        LobbyController controller = gui.getLoader().getController();
+        controller.statusLabel.setText("Failed to connect... try again");
     }
 
     @Override
