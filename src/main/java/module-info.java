@@ -19,4 +19,8 @@ module uk.wwws.checkers.app {
     exports uk.wwws.checkers.net.threads;
     exports uk.wwws.checkers.game;
     exports uk.wwws.checkers.game.players;
+    exports uk.wwws.checkers.events.ui;
+    exports uk.wwws.checkers.events.commands;
+    exports uk.wwws.checkers.events.net;
+    exports uk.wwws.checkers.utils;
 }

@@ -1,18 +1,15 @@
 package uk.wwws.checkers.ui.scenes;
 
 import java.io.IOException;
-import java.util.Scanner;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.ui.GUI;
-import uk.wwws.checkers.ui.UIAction;
 import uk.wwws.checkers.ui.controllers.ReferencedController;
 
-abstract public class StaticScene {
+public class StaticScene {
     private static final Logger logger = LogManager.getRootLogger();
 
     protected final String sceneFileURL;
@@ -23,8 +20,6 @@ abstract public class StaticScene {
         this.gui = gui;
     }
 
-    abstract public void handleAction(@NotNull UIAction action, @Nullable Scanner data);
-
     protected void initialize() {
         gui.setLoader(new FXMLLoader());
         gui.getLoader().setLocation(getClass().getResource("/" + sceneFileURL));
@@ -33,7 +28,6 @@ abstract public class StaticScene {
             scene = new Scene(gui.getLoader().load(), 1200, 600);
         } catch (IOException e) {
             logger.error("Could not load scene: {} {}", sceneFileURL, e.getMessage());
-            e.printStackTrace();
             return;
         }
 

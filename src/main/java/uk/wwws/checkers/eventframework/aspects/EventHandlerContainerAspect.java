@@ -1,6 +1,7 @@
 package uk.wwws.checkers.eventframework.aspects;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,7 @@ import org.aspectj.lang.annotation.Aspect;
 import uk.wwws.checkers.eventframework.Event;
 import uk.wwws.checkers.eventframework.EventManager;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
+import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.aspects.errors.EventHandlerWrongDeclarationError;
 
 @Aspect
@@ -19,10 +21,26 @@ public class EventHandlerContainerAspect {
 
     @After("execution((@uk.wwws.checkers.eventframework.annotations.EventHandlerContainer *).new(..))")
     public void onCreate(JoinPoint joinPoint) {
+        int annotatedMethodCount =
+                addSuperclassMethods(joinPoint.getThis(), joinPoint.getThis().getClass());
+
+        logger.debug("Added {} handlers in {}", annotatedMethodCount, joinPoint.getThis());
+    }
+
+    private int addSuperclassMethods(Object mainThis, Class<?> superClass) {
+        if (!superClass.isAnnotationPresent(EventHandlerContainer.class)) {
+            return 0;
+        }
+
         int annotatedMethodCount = 0;
 
-        for (Method declaredMethod : joinPoint.getThis().getClass().getDeclaredMethods()) {
-            if (!declaredMethod.isAnnotationPresent(EventHandler.class)) {
+        for (Method declaredMethod : superClass.getDeclaredMethods()) {
+            EventHandler annotation = declaredMethod.getAnnotation(EventHandler.class);
+
+            logger.trace("Checking method for adding to event handlers: {} {} {}", superClass,
+                         declaredMethod, declaredMethod.getDeclaredAnnotations());
+
+            if (annotation == null) {
                 continue;
             }
 
@@ -32,33 +50,27 @@ public class EventHandlerContainerAspect {
             }
 
             Class<?> firstParameter = declaredMethod.getParameterTypes()[0];
-            if (!(hasSuperclass(firstParameter, Event.class))) {
+            if (!(isSubclass(firstParameter, Event.class))) {
                 throw new EventHandlerWrongDeclarationError(
                         "The event handler's first argument should extend Event");
             }
 
             declaredMethod.setAccessible(true);
-            EventHandler annotation = declaredMethod.getAnnotation(EventHandler.class);
+
 
             EventManager.getInstance().addListener((firstParameter.asSubclass(Event.class)),
-                                                   new Pair<>(joinPoint.getThis(), declaredMethod),
+                                                   new Pair<>(mainThis, declaredMethod),
                                                    annotation.priority(),
-                                                   annotation.ignoreCanceled());
+                                                   annotation.ignoreCanceled(),
+                                                   annotation.isPlatform());
 
             annotatedMethodCount++;
         }
 
-        if (annotatedMethodCount == 0) {
-            logger.warn("No handlers were found for EventHandlerContainer annotated class in: {}",
-                        joinPoint.getThis().getClass());
-            return;
-        }
-
-        logger.debug("Added {} handlers in {}", annotatedMethodCount,
-                     joinPoint.getThis().getClass());
+        return annotatedMethodCount + addSuperclassMethods(mainThis, superClass.getSuperclass());
     }
 
-    private boolean hasSuperclass(Class<?> clazz, Class<?> superClass) {
+    private boolean isSubclass(Class<?> clazz, Class<?> superClass) {
         if (clazz.getSuperclass() == Object.class) {
             return false;
         }
@@ -67,6 +79,6 @@ public class EventHandlerContainerAspect {
             return true;
         }
 
-        return hasSuperclass(clazz.getSuperclass(), superClass);
+        return isSubclass(clazz.getSuperclass(), superClass);
     }
 }

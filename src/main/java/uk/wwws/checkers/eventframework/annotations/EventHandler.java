@@ -11,4 +11,5 @@ import uk.wwws.checkers.eventframework.Event;
 public @interface EventHandler {
     Priority priority() default Priority.NORMAL;
     boolean ignoreCanceled() default false;
+    boolean isPlatform() default false;
 }

@@ -1,100 +1,70 @@
 package uk.wwws.checkers.apps;
 
-import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.wwws.checkers.ErrorType;
+import uk.wwws.checkers.eventframework.annotations.EventHandler;
 import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
+import uk.wwws.checkers.events.commands.HelpCommandEvent;
+import uk.wwws.checkers.events.commands.StartServerCommandEvent;
+import uk.wwws.checkers.events.commands.StateCommandEvent;
+import uk.wwws.checkers.events.net.*;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.CheckersGame;
-import uk.wwws.checkers.game.Game;
 import uk.wwws.checkers.game.Player;
 import uk.wwws.checkers.game.exceptions.InvalidMoveException;
 import uk.wwws.checkers.game.moves.CheckersMove;
 import uk.wwws.checkers.game.players.ConnectedPlayer;
 import uk.wwws.checkers.net.Connection;
-import uk.wwws.checkers.net.ConnectionReceiver;
 import uk.wwws.checkers.net.PacketAction;
 import uk.wwws.checkers.net.threads.ConnectedClientThread;
-import uk.wwws.checkers.net.threads.ConnectionDataHandler;
-import uk.wwws.checkers.net.threads.NewConnectionHandler;
 import uk.wwws.checkers.net.threads.ServerThread;
-import uk.wwws.checkers.ui.CommandAction;
 import uk.wwws.checkers.ui.UI;
 
 @EventHandlerContainer
-public abstract class ServerLikeApp
-        implements App, ConnectionReceiver, ConnectionDataHandler, NewConnectionHandler {
+public abstract class ServerLikeApp extends App {
     private static final Logger logger = LogManager.getRootLogger();
+    public static final boolean IS_CLIENT = false;
 
-    private static final @NotNull String HELP_MENU = """
-            START_SERVER <port> starts the server on a given port.
-            STOP_SERVER         stops the server.
-            STATE               prints the state of the server.
-            HELP                prints this menu
-            QUIT                closes the application""";
     protected UI ui;
     HashSet<ConnectedClientThread> connections = new HashSet<>();
     Queue<ConnectedPlayer> queue = new LinkedList<>();
     private @Nullable ServerThread serverThread;
 
-    public @NotNull ErrorType handleAction(@Nullable CommandAction action, @NotNull Scanner data) {
-        switch (action) {
-            case START_SERVER -> {
-                return handleStartServer(data);
-            }
-            case STOP_SERVER -> {
-                return stopServer();
-            }
-            case STATE -> {
-                return displayState();
-            }
-            case HELP -> {
-                return handleHelpMenu();
-            }
-            case null, default -> {
-                logger.error(
-                        "Invalid command or wrong argument usage. Type help to get command list");
-                return ErrorType.ERROR;
-            }
-        }
+    public ServerLikeApp() {
+        this.helpText = """
+            START_SERVER <port> starts the server on a given port.
+            STOP_SERVER         stops the server.
+            STATE               prints the state of the server.
+            HELP                prints this menu
+            QUIT                closes the application""";
     }
 
-    private @NotNull ErrorType handleHelpMenu() {
-        logger.info(HELP_MENU);
-        return ErrorType.NONE;
+    @EventHandler
+    private void handleHelpMenu(HelpCommandEvent event) {
+        logger.info(this.helpText);
     }
 
-    private @NotNull ErrorType displayState() {
+    @EventHandler
+    private void displayState(StateCommandEvent event) {
         System.out.println("Size of connections: " + connections.size());
         System.out.println("Queue size: " + queue.size());
-        return ErrorType.NONE;
     }
 
-    private @NotNull ErrorType handleStartServer(@NotNull Scanner data) {
-        Integer port = getNextInt(data);
-
-        if (port == null) {
-            logger.error("Incorrect usage, should be: start_server <port>");
-            return ErrorType.ERROR;
-        }
-
+    @EventHandler
+    private void handleStartServer(StartServerCommandEvent event) {
         if (serverThread != null) {
             stopServer();
         }
 
-        this.serverThread = spawnServer(port);
-
-        return ErrorType.NONE;
+        this.serverThread = spawnServer(event.getPort());
     }
 
-    @Override
     public ServerThread spawnServer(int port) {
-        ServerThread newServerThread = new ServerThread(port, this);
+        ServerThread newServerThread = new ServerThread(port);
         try {
             newServerThread.start();
         } catch (Exception e) {
@@ -105,11 +75,11 @@ public abstract class ServerLikeApp
         return newServerThread;
     }
 
-    @Override
-    public void handleNewConnection(@NotNull Socket socket) {
+    @EventHandler
+    public void handleNewConnection(NewConnectionEvent event) {
         logger.info("New client connected");
         ConnectedClientThread client =
-                new ConnectedClientThread(new ConnectedPlayer(new Connection(socket)), this);
+                new ConnectedClientThread(new ConnectedPlayer(event.getConnection()));
         connections.add(client);
         client.start();
     }
@@ -128,46 +98,15 @@ public abstract class ServerLikeApp
         return getConnectedPlayer(c) == null;
     }
 
-    @Override
-    public ErrorType handleData(@Nullable String data, @NotNull Connection c) {
-        if (data == null) {
-            handleDisconnect(c);
-            return ErrorType.FATAL;
-        }
-
-        Scanner input = new Scanner(data);
-
-        logger.debug("New data: {}", data);
-
-        try {
-            switch (PacketAction.valueOf(input.next().toUpperCase())) {
-                case QUEUE -> handleQueue(c);
-                case MOVE -> handleMove(input, c);
-                case GIVE_UP -> handleGiveUp(c);
-                case BYE, ERROR -> {
-                    handleDisconnect(c);
-                    return ErrorType.FATAL;
-                }
-                default -> {
-                    c.write(PacketAction.ERROR);
-                    return ErrorType.FATAL;
-                }
-            }
-        } catch (Exception e) {
-            c.write(PacketAction.ERROR);
-            return ErrorType.ERROR;
-        }
-
-        return ErrorType.NONE;
-    }
-
-    private void handleGiveUp(@NotNull Connection c) {
-        if (connectionIsNotAThread(c)) {
-            logger.error("Connection is not a thread: {}", c);
+    @EventHandler
+    private void handleGiveUp(GiveUpConnectionEvent event) {
+        Connection connection = event.getConnection();
+        if (connectionIsNotAThread(connection)) {
+            logger.error("Connection is not a thread: {}", connection);
             return;
         }
 
-        ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
         if (player.getGame() == null) {
             return;
         }
@@ -176,12 +115,14 @@ public abstract class ServerLikeApp
         disconnectPlayers(player.getGame());
     }
 
-    private void handleQueue(@NotNull Connection c) {
-        if (connectionIsNotAThread(c)) {
+    @EventHandler
+    private void handleQueue(QueueConnectionEvent event) {
+        Connection connection = event.getConnection();
+        if (connectionIsNotAThread(connection)) {
             return;
         }
 
-        ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
         if (queue.contains(player)) {
             player.getConnection().write(PacketAction.LEFT_QUEUE);
             queue.remove(player);
@@ -198,8 +139,7 @@ public abstract class ServerLikeApp
         checkQueue();
     }
 
-    private void handleGameEnd(
-            @NotNull Player player) { // was working on game packets and game end game tie nstuff
+    private void handleGameEnd(@NotNull Player player) {
         if (player instanceof ConnectedPlayer cp) {
             if (cp.getGame().getWinner() == cp) {
                 cp.getConnection().write(PacketAction.GAME_WON);
@@ -217,13 +157,15 @@ public abstract class ServerLikeApp
         }
     }
 
-    private void handleDisconnect(@NotNull Connection c) {
+    @EventHandler
+    private void handleDisconnect(DisconnectClientConnectionEvent event) {
+        Connection connection = event.getConnection();
         logger.info("Client trying to disconnect");
-        if (connectionIsNotAThread(c)) {
+        if (connectionIsNotAThread(connection)) {
             return;
         }
 
-        ConnectedClientThread clientThread = getConnectedPlayer(c);
+        ConnectedClientThread clientThread = getConnectedPlayer(connection);
         ConnectedPlayer player = clientThread.getPlayer();
         if (player.getGame() != null) {
             player.getGame().setSetLoser(player);
@@ -231,52 +173,46 @@ public abstract class ServerLikeApp
         }
 
         clientThread.interrupt();
-        c.write(PacketAction.BYE);
+        connection.write(PacketAction.BYE);
         connections.remove(clientThread);
         queue.remove(player);
         logger.info("Client disconnected");
     }
 
-    private void handleMove(@NotNull Scanner input, @NotNull Connection c) {
-        int fromIndex;
-        int toIndex;
+    @EventHandler
+    private void handleMove(MoveConnectionEvent event) {
+        Connection connection = event.getConnection();
 
-        try {
-            fromIndex = input.nextInt();
-            toIndex = input.nextInt();
-        } catch (NoSuchElementException | IllegalStateException e) {
-            logger.error("Invalid move packet: {}", Arrays.toString(input.tokens().toArray()));
-            c.write(PacketAction.ERROR);
-            return;
-        }
-
-        ConnectedPlayer player = getConnectedPlayer(c).getPlayer();
+        ConnectedPlayer player = getConnectedPlayer(connection).getPlayer();
         CheckersGame game = player.getGame();
         if (game == null) {
-            c.write(PacketAction.ERROR);
+            connection.write(PacketAction.ERROR);
             logger.error("Player of no game tried to make a move");
             return;
         }
 
         if (game.getTurn() != player) {
-            c.write(PacketAction.ERROR);
+            connection.write(PacketAction.ERROR);
             logger.error("Player tried to move when its not its turn");
             return;
         }
 
         try {
-            player.getGame().doMove(new CheckersMove(fromIndex, toIndex));
+            player.getGame().doMove(new CheckersMove(event.getFromSquare(), event.getToSquare()));
         } catch (InvalidMoveException e) {
-            logger.error("Player tried to play invalid move: {} to {}", fromIndex, toIndex);
+            logger.error("Player tried to play invalid move: {} to {}", event.getFromSquare(),
+                         event.getToSquare());
             if (player.getGame().getTurn() == player) {
-                c.write(PacketAction.YOUR_MOVE);
+                connection.write(PacketAction.YOUR_MOVE);
             }
             return;
         }
 
         for (Player otherPlayer : game.getPlayers()) {
-            ((ConnectedPlayer) otherPlayer).getConnection()
-                    .write(PacketAction.MOVE, MessageFormat.format("{0} {1}", fromIndex, toIndex));
+            ((ConnectedPlayer) otherPlayer).getConnection().write(PacketAction.MOVE,
+                                                                  MessageFormat.format("{0} {1}",
+                                                                                       event.getFromSquare(),
+                                                                                       event.getToSquare()));
         }
 
         // send your move to next player
@@ -315,17 +251,16 @@ public abstract class ServerLikeApp
         }
     }
 
-    @Override
-    public @NotNull ErrorType stopServer() {
+    public void stopServer() {
         if (serverThread == null) {
-            return ErrorType.ERROR;
+            logger.warn("Tried to stop server when server is not on");
+            return;
         }
 
         serverThread.interrupt();
         reset();
 
         logger.info("Stopped server");
-        return ErrorType.NONE;
     }
 
     private void reset() {
@@ -336,10 +271,5 @@ public abstract class ServerLikeApp
             c.interrupt();
         });
         this.connections = new HashSet<>();
-    }
-
-    @Override
-    public @Nullable Game getGameState() {
-        return null;
     }
 }

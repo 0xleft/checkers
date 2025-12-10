@@ -1,12 +1,12 @@
-package uk.wwws.checkers.events.packet;
+package uk.wwws.checkers.events.net;
 
 import uk.wwws.checkers.eventframework.Event;
 import uk.wwws.checkers.net.Connection;
 
-public class PacketEvent extends Event {
+public class ConnectionEvent extends Event {
     protected Connection connection;
 
-    public PacketEvent setConnection(Connection connection) {
+    public ConnectionEvent setConnection(Connection connection) {
         this.connection = connection;
         return this;
     }

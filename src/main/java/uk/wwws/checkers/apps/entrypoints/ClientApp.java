@@ -3,7 +3,6 @@ package uk.wwws.checkers.apps.entrypoints;
 import uk.wwws.checkers.apps.ClientLikeApp;
 import uk.wwws.checkers.game.players.HumanPlayer;
 import uk.wwws.checkers.ui.GUI;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 
 public class ClientApp extends ClientLikeApp {
     private static ClientApp instance;

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.apps.App;
+import uk.wwws.checkers.events.commands.QuitCommandEvent;
 import uk.wwws.checkers.ui.scenes.LobbyScene;
 import uk.wwws.checkers.ui.scenes.SceneManager;
 
@@ -42,14 +43,8 @@ public class GUI extends Application implements UI {
 
         SceneManager.getInstance().loadScene(LobbyScene.class, this);
         stage.setOnCloseRequest((WindowEvent _) -> {
-            app.handleAction(CommandAction.QUIT, new Scanner(""));
             System.exit(0);
         });
-    }
-
-    @Override
-    public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
-        SceneManager.getInstance().getCurrentScene().handleAction(action, data);
     }
 
     @Override

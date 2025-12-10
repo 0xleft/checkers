@@ -1,9 +1,6 @@
-package uk.wwws.checkers.events.packet;
+package uk.wwws.checkers.events.net;
 
-import uk.wwws.checkers.eventframework.Event;
-import uk.wwws.checkers.events.commands.MoveCommandEvent;
-
-class MovePacketEvent extends PacketEvent {
+public class MoveConnectionEvent extends ConnectionEvent {
     private int fromSquare;
     private int toSquare;
 
@@ -11,7 +8,7 @@ class MovePacketEvent extends PacketEvent {
         return fromSquare;
     }
 
-    public MovePacketEvent setFromSquare(int fromSquare) {
+    public MoveConnectionEvent setFromSquare(int fromSquare) {
         this.fromSquare = fromSquare;
         return this;
     }
@@ -20,7 +17,7 @@ class MovePacketEvent extends PacketEvent {
         return toSquare;
     }
 
-    public MovePacketEvent setToSquare(int toSquare) {
+    public MoveConnectionEvent setToSquare(int toSquare) {
         this.toSquare = toSquare;
         return this;
     }

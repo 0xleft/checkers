@@ -6,16 +6,15 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.game.players.ConnectedPlayer;
+import uk.wwws.checkers.net.PacketParser;
 
 public class ConnectedClientThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final @NotNull ConnectedPlayer player;
-    private final ConnectionDataHandler handler;
 
-    public ConnectedClientThread(@NotNull ConnectedPlayer player, ConnectionDataHandler handler) {
+    public ConnectedClientThread(@NotNull ConnectedPlayer player) {
         this.player = player;
-        this.handler = handler;
     }
 
     public @NotNull ConnectedPlayer getPlayer() {
@@ -46,12 +45,7 @@ public class ConnectedClientThread extends Thread {
                 break;
             }
 
-            if (handler.handleData(inputLine, this.player.getConnection()) == ErrorType.FATAL) {
-                break;
-            }
+            PacketParser.getInstance().parsePacket(player.getConnection(), inputLine);
         }
-
-        // send null so client disconnects
-        handler.handleData(null, this.player.getConnection());
     }
 }

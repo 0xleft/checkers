@@ -1,12 +1,13 @@
 package uk.wwws.checkers.events.commands;
 
+import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.eventframework.Event;
 
 public class ConnectCommandEvent extends Event {
     private String host;
-    private int port;
+    private String port;
 
-    public int getPort() {
+    public String getPort() {
         return port;
     }
 
@@ -14,12 +15,12 @@ public class ConnectCommandEvent extends Event {
         return host;
     }
 
-    public ConnectCommandEvent setHost(String host) {
+    public ConnectCommandEvent setHost(@NotNull String host) {
         this.host = host;
         return this;
     }
 
-    public ConnectCommandEvent setPort(int port) {
+    public ConnectCommandEvent setPort(@NotNull String port) {
         this.port = port;
         return this;
     }

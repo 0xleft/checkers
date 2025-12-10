@@ -6,16 +6,15 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.ErrorType;
 import uk.wwws.checkers.net.Connection;
+import uk.wwws.checkers.net.PacketParser;
 
 public class ServerConnectionThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
-    private final ConnectionDataHandler handler;
     private final @NotNull Connection connection;
 
-    public ServerConnectionThread(@NotNull Connection c, ConnectionDataHandler handler) {
+    public ServerConnectionThread(@NotNull Connection c) {
         this.connection = c;
-        this.handler = handler;
     }
 
     public @NotNull Connection getConnection() {
@@ -36,12 +35,8 @@ public class ServerConnectionThread extends Thread {
                 break;
             }
 
-            if (handler.handleData(inputLine, connection) == ErrorType.FATAL) {
-                break;
-            }
+            PacketParser.getInstance().parsePacket(connection, inputLine);
         }
-
-        handler.handleData(null, connection);
     }
 
     @Override

@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 
-record EventHandler(@NotNull Object object, @NotNull Method method, boolean ignoreCanceled) {
+record EventHandler(@NotNull Object object, @NotNull Method method, boolean ignoreCanceled,
+                    boolean platform) {
 }
 
 public class EventManager {
@@ -33,13 +35,15 @@ public class EventManager {
 
     public <E extends Event> void addListener(@NotNull Class<E> eventType,
                                               @NotNull Pair<Object, Method> handler,
-                                              @NotNull Priority priority, boolean ignoreCanceled) {
+                                              @NotNull Priority priority, boolean ignoreCanceled,
+                                              boolean platform) {
         this.listeners.putIfAbsent(eventType, new HashMap<>());
         this.listeners.get(eventType).putIfAbsent(Priority.LOWEST, new HashSet<>());
         this.listeners.get(eventType).putIfAbsent(Priority.NORMAL, new HashSet<>());
         this.listeners.get(eventType).putIfAbsent(Priority.HIGHEST, new HashSet<>());
         this.listeners.get(eventType).get(priority)
-                .add(new EventHandler(handler.getKey(), handler.getValue(), ignoreCanceled));
+                .add(new EventHandler(handler.getKey(), handler.getValue(), ignoreCanceled,
+                                      platform));
     }
 
     public <E extends Event> void dispatchPriorityEvent(@NotNull E event,
@@ -54,16 +58,29 @@ public class EventManager {
                 return;
             }
 
-            try {
-                listener.method().invoke(listener.object(), event);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                logger.error("Error dispatching event in: {} error: {}", event.getClass(),
-                             e.getMessage());
+            if (listener.platform()) {
+                Platform.runLater(() -> {
+                    callListener(listener, event);
+                });
+                return;
             }
+
+            callListener(listener, event);
         });
     }
 
+    private void callListener(@NotNull EventHandler listener, @NotNull Event event) {
+        try {
+            listener.method().invoke(listener.object(), event);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error("Error dispatching event in: {} error: {}", event.getClass(),
+                         e.getMessage());
+        }
+    }
+
     public <E extends Event> void dispatchEvent(E event) {
+        logger.trace("Dispatching new event {}", event);
+
         dispatchPriorityEvent(event, Priority.HIGHEST);
         dispatchPriorityEvent(event, Priority.NORMAL);
         dispatchPriorityEvent(event, Priority.LOWEST);

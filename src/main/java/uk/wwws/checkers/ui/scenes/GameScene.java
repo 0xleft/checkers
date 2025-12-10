@@ -1,6 +1,5 @@
 package uk.wwws.checkers.ui.scenes;
 
-import java.util.Scanner;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -14,15 +13,19 @@ import javafx.scene.shape.Rectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import uk.wwws.checkers.eventframework.annotations.EventHandler;
+import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
+import uk.wwws.checkers.events.commands.MoveCommandEvent;
+import uk.wwws.checkers.events.net.*;
+import uk.wwws.checkers.events.ui.BoardSyncUIEvent;
+import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.game.Board;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.bitboards.Bitboard;
-import uk.wwws.checkers.ui.CommandAction;
 import uk.wwws.checkers.ui.GUI;
-import uk.wwws.checkers.ui.UIAction;
 import uk.wwws.checkers.ui.controllers.GameController;
 
+@EventHandlerContainer
 public class GameScene extends StaticScene {
     private static final Logger logger = LogManager.getRootLogger();
 
@@ -34,40 +37,55 @@ public class GameScene extends StaticScene {
         super("Game.fxml", gui);
     }
 
-    @Override
-    public void handleAction(@NotNull UIAction action, @Nullable Scanner data) {
-        switch (action) {
-            case BOARD_SYNC -> drawBoard();
-            case DISCONNECT -> SceneManager.getInstance().loadScene(LobbyScene.class, gui);
-            case GAME_WON -> {
-                controller.stateLabel.setText("You won!");
-                controller.joinQueueButton.setDisable(false);
-                controller.giveUpButton.setDisable(true);
-            }
-            case GAME_LOST -> {
-                controller.stateLabel.setText("You lost!");
-                controller.joinQueueButton.setDisable(false);
-                controller.giveUpButton.setDisable(true);
-            }
-            case LEFT_QUEUE -> {
-                controller.stateLabel.setText("You left the queue");
-                controller.joinQueueButton.setText("Join queue");
-            }
-            case JOINED_QUEUE -> {
-                controller.stateLabel.setText("You joined the queue");
-                controller.joinQueueButton.setText("Leave queue");
-            }
-            case YOUR_MOVE -> controller.stateLabel.setText("It's your turn to move");
-            case ASSIGN_COLOR -> {
-                // change perspective variable
-                perspective = Checker.valueOf(data.next());
-                drawBoard();
-                controller.stateLabel.setText("You are now playing");
-                controller.joinQueueButton.setText("Join queue");
-                controller.joinQueueButton.setDisable(true);
-                controller.giveUpButton.setDisable(false);
-            }
-        }
+    @EventHandler(isPlatform = true)
+    public void handleBoardSync(BoardSyncUIEvent event) {
+        drawBoard();
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleDisconnect(DisconnectedUIEvent event) {
+        SceneManager.getInstance().loadScene(LobbyScene.class, gui);
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleGameWon(GameWonConnectionEvent event) {
+        controller.stateLabel.setText("You won!");
+        controller.joinQueueButton.setDisable(false);
+        controller.giveUpButton.setDisable(true);
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleGameLost(GameLostConnectionEvent event) {
+        controller.stateLabel.setText("You lost!");
+        controller.joinQueueButton.setDisable(false);
+        controller.giveUpButton.setDisable(true);
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleLeftQueue(LeftQueueConnectionEvent event) {
+        controller.stateLabel.setText("You left the queue");
+        controller.joinQueueButton.setText("Join queue");
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleJoinedQueue(JoinedQueueConnectionEvent event) {
+        controller.stateLabel.setText("You joined the queue");
+        controller.joinQueueButton.setText("Leave queue");
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleYourMove(YourMoveConnectionEvent event) {
+        controller.stateLabel.setText("It's your turn to move");
+    }
+
+    @EventHandler(isPlatform = true)
+    public void handleAssignColor(AssignColorConnectionEvent event) {
+        perspective = event.getColor();
+        drawBoard();
+        controller.stateLabel.setText("You are now playing");
+        controller.joinQueueButton.setText("Join queue");
+        controller.joinQueueButton.setDisable(true);
+        controller.giveUpButton.setDisable(false);
     }
 
     private void drawBoard() {
@@ -138,11 +156,9 @@ public class GameScene extends StaticScene {
             }
 
             if (selectedId != -1) {
-                String coords = selectedId + " " + adjustedIndex;
-                selectedId = -1;
-
+                new MoveCommandEvent().setFromSquare(selectedId).setToSquare(adjustedIndex).emit();
                 controller.stateLabel.setText("Waiting for opponent to move");
-                gui.getApp().handleAction(CommandAction.MOVE, new Scanner(coords));
+                selectedId = -1;
             }
         });
     }

@@ -4,12 +4,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.ai.DummyAIPlayer;
 import uk.wwws.checkers.apps.ClientLikeApp;
+import uk.wwws.checkers.eventframework.annotations.EventHandler;
+import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
+import uk.wwws.checkers.eventframework.annotations.Priority;
+import uk.wwws.checkers.events.net.YourMoveConnectionEvent;
 import uk.wwws.checkers.game.moves.CheckersMove;
-import uk.wwws.checkers.net.ConnectionSender;
-import uk.wwws.checkers.net.threads.ConnectionDataHandler;
 import uk.wwws.checkers.ui.TUI;
 
-public class AIApp extends ClientLikeApp implements ConnectionSender, ConnectionDataHandler {
+@EventHandlerContainer
+public class AIApp extends ClientLikeApp {
     private static final Logger logger = LogManager.getRootLogger();
 
     private static AIApp instance;
@@ -40,16 +43,9 @@ public class AIApp extends ClientLikeApp implements ConnectionSender, Connection
         sendMove(bestMove);
     }
 
-    @Override
-    protected void handleYourMove() {
-        super.handleYourMove();
-        if (game.getTurn() == player) {
-            try {
-                Thread.sleep(500);
-            } catch (Exception e) {
-            }
-            sendBestMove();
-        }
+    @EventHandler(priority = Priority.LOWEST)
+    public void handleAIToMove(YourMoveConnectionEvent event) {
+        sendBestMove();
     }
 
     @Override

@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.wwws.checkers.events.net.NewConnectionEvent;
+import uk.wwws.checkers.net.Connection;
 import uk.wwws.checkers.net.exceptions.FailedToConnectException;
+import uk.wwws.checkers.net.exceptions.FailedToCreateStreamsException;
 
 public class ServerThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final int port;
-    private final NewConnectionHandler handler;
     private ServerSocket socket;
 
-    public ServerThread(int port, NewConnectionHandler handler) throws FailedToConnectException {
+    public ServerThread(int port) {
         this.port = port;
-        this.handler = handler;
     }
 
     public void run() {
@@ -30,8 +31,8 @@ public class ServerThread extends Thread {
 
         while (true) {
             try {
-                handler.handleNewConnection(socket.accept());
-            } catch (IOException e) {
+                new NewConnectionEvent().setConnection(new Connection(socket.accept())).emit();
+            } catch (IOException | FailedToCreateStreamsException e) {
                 logger.error("Error in handling new connection: {}", e.getMessage());
             }
         }

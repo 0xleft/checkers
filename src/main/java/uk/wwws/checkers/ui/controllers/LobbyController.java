@@ -1,15 +1,17 @@
 package uk.wwws.checkers.ui.controllers;
 
-import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uk.wwws.checkers.ErrorType;
-import uk.wwws.checkers.ui.CommandAction;
+import uk.wwws.checkers.eventframework.annotations.EventHandler;
+import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
+import uk.wwws.checkers.events.commands.ConnectCommandEvent;
+import uk.wwws.checkers.events.ui.FailedToConnectUIEvent;
 
+@EventHandlerContainer
 public class LobbyController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();
 
@@ -28,14 +30,13 @@ public class LobbyController extends ReferencedController {
         statusLabel.setText("Connecting...");
         statusLabel.setVisible(true);
 
-        // todo handle null pointer however at this point if its null here a lot more shit is realdy fucked up
-        ErrorType err = gui.getApp().handleAction(CommandAction.CONNECT,
-                                   new Scanner(hostnameField.getText() + " " + portField.getText()));
-
+        new ConnectCommandEvent().setHost(hostnameField.getText()).setPort(portField.getText()).emit();
         joinButton.setDisable(false);
-        if (err.isError()) {
-            statusLabel.setVisible(true);
-            statusLabel.setText("Failed to connect...");
-        }
+    }
+
+    @EventHandler
+    public void handleFailedToConnect(FailedToConnectUIEvent event) {
+        statusLabel.setVisible(true);
+        statusLabel.setText("Failed to connect...");
     }
 }

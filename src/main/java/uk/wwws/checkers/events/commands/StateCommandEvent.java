@@ -2,5 +2,5 @@ package uk.wwws.checkers.events.commands;
 
 import uk.wwws.checkers.eventframework.Event;
 
-public class StartServerCommand extends Event {
+public class StateCommandEvent extends Event {
 }

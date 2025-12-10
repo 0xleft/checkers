@@ -1,6 +1,5 @@
 package uk.wwws.checkers.ui.controllers;
 
-import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,7 +7,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uk.wwws.checkers.ui.CommandAction;
+import uk.wwws.checkers.events.commands.DisconnectCommandEvent;
+import uk.wwws.checkers.events.commands.GiveUpCommandEvent;
+import uk.wwws.checkers.events.commands.QueueCommandEvent;
 
 public class GameController extends ReferencedController {
     private static final Logger logger = LogManager.getRootLogger();
@@ -28,16 +29,16 @@ public class GameController extends ReferencedController {
 
     @FXML
     protected void onGiveUpButtonAction() {
-        gui.getApp().handleAction(CommandAction.GIVE_UP, new Scanner(""));
+        new GiveUpCommandEvent().emit();
     }
 
     @FXML
     protected void onJoinQueueButtonAction() {
-        gui.getApp().handleAction(CommandAction.QUEUE, new Scanner(""));
+        new QueueCommandEvent().emit();
     }
 
     @FXML
     protected void onDisconnectButtonAction() {
-        gui.getApp().handleAction(CommandAction.DISCONNECT, new Scanner(""));
+        new DisconnectCommandEvent().emit();
     }
 }
