@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.events.net.*;
+import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.utils.DataParser;
 

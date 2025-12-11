@@ -14,6 +14,7 @@ import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.commands.HelpCommandEvent;
 import uk.wwws.checkers.events.commands.StartServerCommandEvent;
 import uk.wwws.checkers.events.commands.StateCommandEvent;
+import uk.wwws.checkers.events.commands.StopServerCommandEvent;
 import uk.wwws.checkers.events.net.*;
 import uk.wwws.checkers.game.Checker;
 import uk.wwws.checkers.game.CheckersGame;
@@ -63,6 +64,16 @@ public abstract class ServerLikeApp extends App {
         }
 
         this.serverThread = spawnServer(event.getPort());
+    }
+
+    @EventHandler
+    private void handleStopServer(StopServerCommandEvent event) {
+        if (serverThread == null) {
+            logger.info("Server is not running");
+            return;
+        }
+
+        stopServer();
     }
 
     public ServerThread spawnServer(int port) {

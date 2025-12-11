@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.apps.App;
+import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.ui.scenes.LobbyScene;
 import uk.wwws.checkers.ui.scenes.SceneManager;
 
@@ -39,7 +40,8 @@ public class GUI extends Application implements UI {
         this.currentStage = stage;
         this.loader = new FXMLLoader();
 
-        SceneManager.getInstance().loadScene(LobbyScene.class, this);
+        SceneManager.getInstance().setGui(this);
+        new DisconnectedUIEvent().emit();
         stage.setOnCloseRequest((WindowEvent _) -> {
             System.exit(0);
         });

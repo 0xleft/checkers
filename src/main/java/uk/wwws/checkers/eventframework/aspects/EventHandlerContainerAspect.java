@@ -58,8 +58,6 @@ public class EventHandlerContainerAspect {
                                                    annotation.isPlatform());
 
             annotatedMethodCount++;
-
-            logger.debug("Added new handler: {}", declaredMethod);
         }
 
         if (superClass.getSuperclass() == Object.class) {

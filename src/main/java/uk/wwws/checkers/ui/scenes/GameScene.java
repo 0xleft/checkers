@@ -45,11 +45,6 @@ public class GameScene extends StaticScene {
     }
 
     @EventHandler(isPlatform = true)
-    public void handleDisconnect(DisconnectedUIEvent event) {
-        SceneManager.getInstance().loadScene(LobbyScene.class, gui);
-    }
-
-    @EventHandler(isPlatform = true)
     public void handleGameWon(GameWonConnectionEvent event) {
         controller.stateLabel.setText("You won!");
         controller.joinQueueButton.setDisable(false);
