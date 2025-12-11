@@ -37,6 +37,7 @@ public class StaticScene {
             logger.error("Current scene is null while loading url: {}", sceneFileURL);
             return;
         }
+
         gui.getCurrentStage().setTitle("Checkers " + sceneFileURL);
         gui.getCurrentStage().setScene(scene);
         gui.getCurrentStage().show();

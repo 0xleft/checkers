@@ -19,11 +19,6 @@ public class LobbyScene extends StaticScene {
     }
 
     @EventHandler(isPlatform = true)
-    public void handleConnected(ConnectedUIEvent event) {
-        SceneManager.getInstance().loadScene(GameScene.class, gui);
-    }
-
-    @EventHandler(isPlatform = true)
     public void handleFailedToConnect(FailedToConnectUIEvent event) {
         LobbyController controller = gui.getLoader().getController();
         controller.statusLabel.setText("Failed to connect... try again");

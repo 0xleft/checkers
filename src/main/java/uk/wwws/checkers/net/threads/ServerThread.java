@@ -13,6 +13,8 @@ public class ServerThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final int port;
+    private boolean shouldExit = false;
+    private ServerSocket serverSocket;
 
     public ServerThread(int port) {
         this.port = port;
@@ -21,7 +23,6 @@ public class ServerThread extends Thread {
     public void run() {
         super.run();
 
-        ServerSocket serverSocket;
 
         try {
             serverSocket = new ServerSocket(port);
@@ -30,13 +31,24 @@ public class ServerThread extends Thread {
             return;
         }
 
-        while (true) {
+        while (!shouldExit) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 new NewConnectionEvent().setConnection(new Connection(clientSocket)).emit();
             } catch (IOException | FailedToCreateStreamsException e) {
                 logger.error("Error in handling new connection: {}", e.getMessage());
             }
+        }
+    }
+
+    @Override
+    public void interrupt() {
+        super.interrupt();
+        shouldExit = true;
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            logger.error("Failed to close server socket");
         }
     }
 }
