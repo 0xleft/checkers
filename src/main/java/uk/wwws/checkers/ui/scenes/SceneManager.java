@@ -31,11 +31,6 @@ public class SceneManager {
     }
 
     public <T> void loadScene(@NotNull Class<T> sceneClass, @NotNull GUI gui) {
-        if (currentScene != null && sceneClass == currentScene.getClass()) {
-            logger.error("Did not reload same scene");
-            return;
-        }
-
         try {
             currentScene =
                     (StaticScene) sceneClass.getDeclaredConstructor(GUI.class).newInstance(gui);
