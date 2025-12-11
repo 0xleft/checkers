@@ -4,14 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.ui.ConnectedUIEvent;
 import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.ui.GUI;
 
-@EventHandlerContainer
-public class SceneManager {
+public class SceneManager implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     private static SceneManager instance;

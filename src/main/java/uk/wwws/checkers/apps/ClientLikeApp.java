@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 import uk.wwws.checkers.events.commands.*;
 import uk.wwws.checkers.events.net.*;
@@ -21,8 +21,7 @@ import uk.wwws.checkers.net.exceptions.FailedToConnectException;
 import uk.wwws.checkers.net.threads.ConnectionThread;
 import uk.wwws.checkers.ui.UI;
 
-@EventHandlerContainer
-public abstract class ClientLikeApp extends App {
+public abstract class ClientLikeApp extends App implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     protected UI ui;

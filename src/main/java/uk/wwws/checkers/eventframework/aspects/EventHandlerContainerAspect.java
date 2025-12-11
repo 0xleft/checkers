@@ -16,7 +16,7 @@ import uk.wwws.checkers.eventframework.aspects.errors.EventHandlerWrongDeclarati
 public class EventHandlerContainerAspect {
     private static final Logger logger = LogManager.getRootLogger();
 
-    @After("execution((@uk.wwws.checkers.eventframework.annotations.EventHandlerContainer *).new(..))")
+    @After("execution(*.new(..)) && this(uk.wwws.checkers.eventframework.Listener)")
     public void onCreate(JoinPoint joinPoint) {
         int annotatedMethodCount =
                 addSuperclassMethods(joinPoint.getThis(), joinPoint.getThis().getClass());

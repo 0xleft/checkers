@@ -4,15 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.wwws.checkers.ai.DummyAIPlayer;
 import uk.wwws.checkers.apps.ClientLikeApp;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 import uk.wwws.checkers.events.net.YourMoveConnectionEvent;
 import uk.wwws.checkers.game.moves.CheckersMove;
 import uk.wwws.checkers.ui.TUI;
 
-@EventHandlerContainer
-public class AIApp extends ClientLikeApp {
+public class AIApp extends ClientLikeApp implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     private static AIApp instance;

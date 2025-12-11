@@ -2,15 +2,14 @@ package uk.wwws.checkers.apps;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.commands.HelpCommandEvent;
 import uk.wwws.checkers.events.commands.StartServerCommandEvent;
 import uk.wwws.checkers.events.commands.StateCommandEvent;
@@ -28,8 +27,7 @@ import uk.wwws.checkers.net.threads.ConnectionThread;
 import uk.wwws.checkers.net.threads.ServerThread;
 import uk.wwws.checkers.ui.UI;
 
-@EventHandlerContainer
-public abstract class ServerLikeApp extends App {
+public abstract class ServerLikeApp extends App implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     protected UI ui;
