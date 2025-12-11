@@ -13,11 +13,10 @@ import javafx.scene.shape.Rectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.net.*;
 import uk.wwws.checkers.events.ui.BoardSyncUIEvent;
-import uk.wwws.checkers.events.ui.DisconnectedUIEvent;
 import uk.wwws.checkers.events.ui.GameRequiredUIEvent;
 import uk.wwws.checkers.events.ui.NotYourMoveUIEvent;
 import uk.wwws.checkers.game.Board;
@@ -27,8 +26,7 @@ import uk.wwws.checkers.ui.CommandParser;
 import uk.wwws.checkers.ui.GUI;
 import uk.wwws.checkers.ui.controllers.GameController;
 
-@EventHandlerContainer
-public class GameScene extends StaticScene {
+public class GameScene extends StaticScene implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     private GameController controller;
@@ -42,11 +40,6 @@ public class GameScene extends StaticScene {
     @EventHandler(isPlatform = true)
     public void handleBoardSync(BoardSyncUIEvent event) {
         drawBoard();
-    }
-
-    @EventHandler(isPlatform = true)
-    public void handleDisconnect(DisconnectedUIEvent event) {
-        SceneManager.getInstance().loadScene(LobbyScene.class, gui);
     }
 
     @EventHandler(isPlatform = true)

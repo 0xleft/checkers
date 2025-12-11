@@ -6,13 +6,12 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.apps.App;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.eventframework.annotations.Priority;
 import uk.wwws.checkers.events.commands.QuitCommandEvent;
 
-@EventHandlerContainer
-public class TUI implements UI {
+public class TUI implements UI, Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final Scanner scanner;

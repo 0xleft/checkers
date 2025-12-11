@@ -6,13 +6,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.wwws.checkers.eventframework.Listener;
 import uk.wwws.checkers.eventframework.annotations.EventHandler;
-import uk.wwws.checkers.eventframework.annotations.EventHandlerContainer;
 import uk.wwws.checkers.events.ui.FailedToConnectUIEvent;
 import uk.wwws.checkers.ui.CommandParser;
 
-@EventHandlerContainer
-public class LobbyController extends ReferencedController {
+public class LobbyController extends ReferencedController implements Listener {
     private static final Logger logger = LogManager.getRootLogger();
 
     @FXML

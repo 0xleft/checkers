@@ -4,15 +4,16 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import uk.wwws.checkers.events.net.DisconnectClientConnectionEvent;
 import uk.wwws.checkers.net.Connection;
 import uk.wwws.checkers.net.PacketParser;
 
-public class ServerConnectionThread extends Thread {
+public class ConnectionThread extends Thread {
     private static final Logger logger = LogManager.getRootLogger();
 
     private final @NotNull Connection connection;
 
-    public ServerConnectionThread(@NotNull Connection c) {
+    public ConnectionThread(@NotNull Connection c) {
         this.connection = c;
     }
 
@@ -21,21 +22,22 @@ public class ServerConnectionThread extends Thread {
     }
 
     public void run() {
-        logger.debug("Started new server connection");
+        logger.debug("Started new connection");
 
         super.run();
 
         String inputLine;
 
         while (true) {
-            try {
-                inputLine = connection.read();
-            } catch (IOException e) {
+            inputLine = connection.read();
+            if (inputLine == null) {
                 break;
             }
 
             PacketParser.getInstance().parsePacket(connection, inputLine);
         }
+
+        new DisconnectClientConnectionEvent().setConnection(connection).emit();
     }
 
     @Override

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import uk.wwws.checkers.game.Game;
 import uk.wwws.checkers.utils.DataParser;
 
-public abstract class App implements DataParser {
+public abstract class App {
     protected String helpText = "";
 
     public abstract void run();
